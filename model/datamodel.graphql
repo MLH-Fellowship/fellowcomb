@@ -1,0 +1,33 @@
+"""
+@model
+"""
+type Pod {
+  """
+  @id
+  """
+  _id: ID!
+  title: String!
+  """
+  @oneToMany(field: 'pod')
+  """
+  users: [User]!
+}
+
+"""
+@model
+"""
+type User {
+  """
+  @id
+  """
+  _id: ID!
+  name: String!
+}
+
+input GetPodMembersInput {
+  podID: ID!
+}
+
+type Query {
+  getPodMembers(input: GetPodMembersInput!): [User]
+}
