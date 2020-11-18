@@ -1,4 +1,5 @@
 node_modules
 dist
-types
 .env
+types
+!src/types
