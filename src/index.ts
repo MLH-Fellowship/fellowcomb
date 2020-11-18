@@ -4,6 +4,7 @@ import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
 import express from 'express';
 import http from 'http';
+import { createContext } from './context';
 import {schema} from "./schema"
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(cors());
 
 const apolloServer = new ApolloServer({
   schema,
+  context: createContext
 });
 
 apolloServer.applyMiddleware({ app });
