@@ -5,7 +5,7 @@ import Profile from "../components/profile";
 import ClusterWrapper from "../components/clusterWrapper";
 
 const Home = () => {
-  const color = "red";
+  const color = "purple";
   return (
     <Flex width="90vw" align="center" direction="column">
       <Profile
