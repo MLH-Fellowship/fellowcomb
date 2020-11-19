@@ -7,7 +7,6 @@ const User = objectType({
   name: "User",
   definition(t){
     t.model.id()
-    t.model.name()
   }
 })
 
@@ -18,12 +17,13 @@ const Query = queryType({
 })
 
 export const schema = makeSchema({
-  types: [Query],
+  types: [Query, User],
   plugins: [nexusSchemaPrisma()],
   outputs: {
     schema: path.join(__dirname, 'schema.graphql'),
-    typegen: path.join(__dirname, "nexus.ts")
+    typegen: path.join(__dirname, "nexus.d.ts")
   },
+  shouldExitAfterGenerateArtifacts: Boolean(process.env.NEXUS_SHOULD_EXIT_AFTER_REFLECTION),
   typegenAutoConfig: {
     contextType: "Context.Context",
     sources: [
