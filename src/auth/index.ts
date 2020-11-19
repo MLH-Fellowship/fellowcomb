@@ -29,7 +29,24 @@ router.post("/github", async (req, res, next) => {
   }
   const response = await axios.post(github_access_token_url, github_access_token_request_params, {headers: {"accept": "application/json"}});
   const {access_token, scope, token_type} = response.data;
-  
+
+  //Check if user is in MLH
+  const user_api_orgs = "https://api.github.com/user/orgs";
+  const user_orgs_response =  await axios.get(user_api_orgs, {headers: {"authorization": `token ${access_token}`}});
+  const user_orgs: any[] = user_orgs_response.data;
+  const isPartOfMLH = user_orgs.reduce<boolean>((acc, curr) => {
+    if(curr.login === "mlh-fellowship") {
+      return true
+    }
+    return acc || curr;
+  }, false);
+
+  if(!isPartOfMLH) {
+    res.send("Unauthorised");
+    next();
+    return;
+  }
+
   try {
     const user_api = "https://api.github.com/user";
     const user =  await axios.get(user_api, {headers: {"authorization": `token ${access_token}`}});
@@ -62,7 +79,30 @@ router.post("/github", async (req, res, next) => {
 });
 
 router.post("/discord", async(req, res, next) => {
-  res.send("In progress")
+  const {code, userSessionToken, tokenScope} = req.body;
+
+  const data = {
+    client_id: process.env.DISCORD_ID,
+    client_secret: process.env.DISCORD_SECRET,
+    grant_type: 'authorization_code',
+    code,
+    tokenScope
+  };
+
+  const discord_auth_api = "https://discord.com/api/oauth2/token"
+  const discord_token_response = await axios.post(discord_auth_api, new URLSearchParams(data), {headers: {
+    "accept": "application/json",
+    'Content-Type': 'application/x-www-form-urlencoded',
+  }});
+  const {access_token, token_type, refresh_token, scope} = discord_token_response.data;
+
+  const discord_api_me = "https://discord.com/api/users/@me"
+  const discordUser = axios.get(discord_api_me, {headers: {
+    authorization: `${token_type} ${access_token}`
+  }})
+
+  const user = await prismaAuthClient.userSession.findOne({where: {id: userSessionToken}}).user();
+  const updatedUser = await prismaAuthClient.user.update({where: {id: user.id}, data: {discord_access_code: access_token}})
 });
 
 export default router;
