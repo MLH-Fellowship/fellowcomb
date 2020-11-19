@@ -19,6 +19,7 @@ const App: React.FC = ({ user }) => {
         align="center"
         justifyContent="center"
         direction="column"
+        paddingBottom="10"
       >
         <Switch>
           <AuthorizedRoute exact path="/" user={true} component={Home} />

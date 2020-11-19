@@ -59,9 +59,17 @@ const Header = (props) => {
                 type="text"
                 placeholder="Find People..."
                 onChange={handleChange}
+                focusBorderColor="yellow.500"
               />
-              <InputRightElement width="4.5rem">
-                <Button h="1.75rem" size="md" onClick={sendSearch}>
+              <InputRightElement colorScheme="yellow" width="4.5rem">
+                <Button
+                  h="1.75rem"
+                  size="md"
+                  onClick={sendSearch}
+                  colorScheme="yellow"
+                  variant="outline"
+                  border="0px"
+                >
                   <span role="img" aria-label="search">
                     🔍
                   </span>
@@ -71,9 +79,10 @@ const Header = (props) => {
             <Button
               bg="transparent"
               variant="outline"
-              border="1px"
+              border="0px"
               mx={6}
               onClick={() => signOut()}
+              colorScheme="yellow"
             >
               Sign Out
             </Button>
