@@ -17,16 +17,14 @@ const ClusterWrapper = ({ username, ...props }) => {
     { name: "Jest", users: ["jcs98", "flozender"] },
   ];
   return (
-    <>
-      <Flex mt="5vh" mb="1.8vh" px="2vw" width="full">
-        <Heading width="full" size="lg">
-          {`${username}'s clusters`}
-        </Heading>
-      </Flex>
+    <Flex width="6xl" direction="column">
+      <Heading width="full" size="lg" mt="8" mb="4">
+        {`${username}'s clusters`}
+      </Heading>
       {clusters.map((cluster) => (
         <Cluster data={cluster} {...props} />
       ))}
-    </>
+    </Flex>
   );
 };
 
