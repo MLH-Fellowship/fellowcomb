@@ -34,6 +34,9 @@ export interface NexusGenScalars {
 
 export interface NexusGenRootTypes {
   Query: {};
+  User: { // root type
+    id: string; // String!
+  }
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
@@ -48,11 +51,17 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     name: string | null; // String
   }
+  User: { // field return type
+    id: string; // String!
+  }
 }
 
 export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     name: 'String'
+  }
+  User: { // field return type name
+    id: 'String'
   }
 }
 
@@ -64,7 +73,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Query";
+export type NexusGenObjectNames = "Query" | "User";
 
 export type NexusGenInputNames = never;
 

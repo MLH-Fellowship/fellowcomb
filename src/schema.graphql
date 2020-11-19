@@ -5,3 +5,7 @@
 type Query {
   name: String
 }
+
+type User {
+  id: String!
+}

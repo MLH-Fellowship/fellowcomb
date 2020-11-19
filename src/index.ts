@@ -6,10 +6,13 @@ import express from 'express';
 import http from 'http';
 import { createContext } from './context';
 import {schema} from "./schema"
+import auth from "./auth";
 
 const app = express();
 
 app.use(cors());
+app.use(express.json())
+app.use("/auth", auth);
 
 const apolloServer = new ApolloServer({
   schema,

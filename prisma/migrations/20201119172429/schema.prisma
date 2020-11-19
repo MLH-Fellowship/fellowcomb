@@ -4,20 +4,16 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model User {
   id                  String        @id @default(cuid())
   username            String        @unique
   name                String
-  pictureURL          String?
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @default(now())
   deletedAt           DateTime?
-  github_url          String
-  github_followers    Int
-  github_following    Int
   github_access_code  String
   linkedin            String?
   calendly            String?
