@@ -90,6 +90,16 @@ router.post("/github", async (req, res, next) => {
       const session = await createUserSession(newCreatedUser);
       res.send(session.id);
     } else {
+      const existingSessions = await prismaAuthClient.user
+        .findOne({ where: { id: userFromDatabase.id } })
+        .UserSessions();
+      await Promise.all(
+        existingSessions.map(async (session) => {
+          await prismaAuthClient.userSession.delete({
+            where: { id: session.id },
+          });
+        })
+      );
       const session = await createUserSession(userFromDatabase);
       res.send(session.id);
     }
