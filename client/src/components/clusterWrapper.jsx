@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, Heading } from "@chakra-ui/react";
 
 import Cluster from "../components/cluster";
 
@@ -7,6 +7,7 @@ const ClusterWrapper = ({ username, ...props }) => {
   const getClusters = (username) => alert("Give us the API yugi!");
 
   //   const clusters = getClusters(username);
+
   //   dummy array
   const clusters = [
     {
@@ -14,6 +15,38 @@ const ClusterWrapper = ({ username, ...props }) => {
       users: ["jcs98", "flozender", "utkarsh867"],
       defaultCluster: true,
     },
+    {
+      name: "Jest",
+      users: [
+        "jcs98",
+        "flozender",
+        "utkarsh867",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+        "jcs98",
+      ],
+    },
+    { name: "Jest", users: ["jcs98", "flozender"] },
+    { name: "Jest", users: ["jcs98", "flozender", "utkarsh867"] },
+    { name: "Jest", users: ["jcs98", "flozender"] },
+    { name: "Jest", users: ["jcs98", "flozender"] },
+    { name: "Jest", users: ["jcs98", "flozender"] },
     { name: "Jest", users: ["jcs98", "flozender"] },
   ];
   return (
@@ -21,9 +54,11 @@ const ClusterWrapper = ({ username, ...props }) => {
       <Heading width="full" size="lg" mt="8" mb="4">
         {`${username}'s clusters`}
       </Heading>
-      {clusters.map((cluster) => (
-        <Cluster data={cluster} {...props} />
-      ))}
+      <Box maxH="50vh" overflowY="scroll">
+        {clusters.map((cluster) => (
+          <Cluster data={cluster} {...props} />
+        ))}
+      </Box>
     </Flex>
   );
 };

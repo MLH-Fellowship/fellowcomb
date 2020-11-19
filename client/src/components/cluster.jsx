@@ -1,6 +1,15 @@
 import React from "react";
 
-import { Box, Flex, Text, Spacer, Divider, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Text,
+  Spacer,
+  Divider,
+  Button,
+  Wrap,
+  WrapItem,
+} from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa";
 import CAvatar from "./clickableAvatar";
 
@@ -27,13 +36,22 @@ const Cluster = ({ data, color }) => {
         )}
       </Flex>
       <Divider />
-      <Flex mt="4" mb="8" width="full" align="center" direction="row">
+      <Wrap
+        spacing="4"
+        mt="4"
+        mb="8"
+        width="full"
+        align="center"
+        direction="row"
+      >
         {users.map((user) => (
-          <Box mr="4">
-            <CAvatar user={user} color="gray.400" size="md" />
-          </Box>
+          <WrapItem>
+            <Box>
+              <CAvatar user={user} color="gray.400" size="md" />
+            </Box>
+          </WrapItem>
         ))}
-      </Flex>
+      </Wrap>
     </Box>
   );
 };
