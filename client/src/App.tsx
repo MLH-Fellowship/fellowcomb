@@ -7,6 +7,7 @@ import AuthorizedRoute from "./components/authRoute";
 
 import Header from "./components/header";
 
+import CodeHandler from "./pages/codeHandler";
 import Home from "./pages/home";
 import SignIn from "./pages/signin";
 
@@ -21,7 +22,8 @@ const App: React.FC = ({ user }) => {
         direction="column"
       >
         <Switch>
-          <AuthorizedRoute exact path="/" user={true} component={Home} />
+          <AuthorizedRoute exact path="/" user={false} component={Home} />
+          <Route exact path="/authorize/github" component={CodeHandler} />
           <Route exact path="/auth" component={SignIn} />
         </Switch>
       </Flex>
