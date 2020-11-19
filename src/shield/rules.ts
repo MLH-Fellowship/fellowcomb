@@ -1,8 +1,12 @@
-import { shield, and } from "graphql-shield";
-import {} from "./rules";
+import { Context } from "../context";
+import { rule } from "graphql-shield";
 
-export const permissions = shield({
-  Query: {
-  },
-  Mutation: {},
-});
+export const isAuthenticated = rule({ cache: "contextual" })(
+  async (parent, args, ctx: Context) => {
+    const userSession = await ctx.prisma.userSession.findOne({where: {id: ctx.token}});
+    if(userSession){
+      return true
+    }
+    return false;
+  }
+);
