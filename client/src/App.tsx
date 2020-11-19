@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, Flex } from "@chakra-ui/react";
 
 import AuthorizedRoute from "./components/authRoute";
 
@@ -14,10 +14,17 @@ const App: React.FC = ({ user }) => {
   return (
     <ChakraProvider resetCSS={true}>
       <Header />
-      <Switch>
-        <AuthorizedRoute exact path="/" user={true} component={Home} />
-        <Route exact path="/auth" component={SignIn} />
-      </Switch>
+      <Flex
+        width="full"
+        align="center"
+        justifyContent="center"
+        direction="column"
+      >
+        <Switch>
+          <AuthorizedRoute exact path="/" user={true} component={Home} />
+          <Route exact path="/auth" component={SignIn} />
+        </Switch>
+      </Flex>
     </ChakraProvider>
   );
 };

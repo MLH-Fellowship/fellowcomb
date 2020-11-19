@@ -1,20 +1,27 @@
 import React from "react";
 import { Flex, Box, Heading } from "@chakra-ui/react";
 
+import Profile from "../components/profile";
+
 const Home = () => {
   return (
     <Flex
-      width="full"
+      width="90vw"
       align="center"
       justifyContent="center"
       direction="column"
-      height="60vh"
+      marginTop="5vh"
     >
-      <Box>
-        <Heading my={"2rem"} fontFamily="'KoHo', sans-serif;">
-          fellowcomb
-        </Heading>
-      </Box>
+      <Profile
+        user={{
+          name: "Jainam Shah",
+          calendly: "",
+          linkedin: "https://linkedin.com/in/jainam-chirag-shah",
+          github: "https://github.com/jcs98",
+          discord: "https://discordapp.com/users/206875427631923200",
+        }}
+        color="orange"
+      />
     </Flex>
   );
 };
