@@ -1,7 +1,8 @@
 import React from "react";
-import { Flex, Box, Heading } from "@chakra-ui/react";
+import { Flex, Heading } from "@chakra-ui/react";
 
 import Profile from "../components/profile";
+import Cluster from "../components/cluster";
 
 const Home = () => {
   return (
@@ -21,6 +22,23 @@ const Home = () => {
           discord: "https://discordapp.com/users/206875427631923200",
         }}
         color="orange"
+      />
+      <Flex mt="5vh" mb="1.8vh" px="2vw" width="full">
+        <Heading width="full" size="lg">
+          Clusters
+        </Heading>
+      </Flex>
+      <Cluster
+        data={{
+          name: "Pod 1.0.3",
+          users: ["jcs98", "flozender", "utkarsh867"],
+          defaultCluster: true,
+        }}
+        color="orange"
+      />
+      <Cluster
+        data={{ name: "Jest", users: ["jcs98", "flozender"] }}
+        color="red"
       />
     </Flex>
   );
