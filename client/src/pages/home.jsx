@@ -7,13 +7,7 @@ import ClusterWrapper from "../components/clusterWrapper";
 const Home = () => {
   const color = "red";
   return (
-    <Flex
-      width="90vw"
-      align="center"
-      justifyContent="center"
-      direction="column"
-      marginTop="5vh"
-    >
+    <Flex width="90vw" align="center" direction="column">
       <Profile
         user={{
           name: "Jainam Shah",

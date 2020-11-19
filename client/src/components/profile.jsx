@@ -20,7 +20,7 @@ const Profile = ({ user, color }) => {
 
   return (
     <>
-      <Flex width="full" align="center" direction="row" padding="8">
+      <Flex w="6xl" align="center" direction="row" py="8">
         <Avatar size="2xl" background={iconColor} />
         <Heading ml="8" size="xl">
           {user.name}
@@ -61,7 +61,7 @@ const Profile = ({ user, color }) => {
           </Link>
         </HStack>
       </Flex>
-      <Divider />
+      <Divider w="6xl" css={{ borderWidth: "2px" }} />
     </>
   );
 };
