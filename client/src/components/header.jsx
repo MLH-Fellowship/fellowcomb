@@ -61,7 +61,7 @@ const Header = (props) => {
                 onChange={handleChange}
                 focusBorderColor="yellow.500"
               />
-              <InputRightElement colorScheme="yellow" width="4.5rem">
+              <InputRightElement width="4.5rem">
                 <Button
                   h="1.75rem"
                   size="md"

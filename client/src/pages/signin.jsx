@@ -16,14 +16,15 @@ const SignIn = () => {
     >
       <Image width="7rem" src={Honeycomb} />
       <Box>
-        <Heading my={"2rem"} fontFamily="'KoHo', sans-serif;">
+        <Heading my={"2rem"} size="3xl" fontFamily="'KoHo', sans-serif;">
           fellowcomb
         </Heading>
       </Box>
       <Link
+        style={{ textDecoration: "none" }}
         href={`https://github.com/login/oauth/authorize?scope=user&client_id=${REACT_APP_GITHUB_CLIENT_ID}`}
       >
-        <Button>Continue with Github</Button>
+        <Button colorScheme="yellow">Continue with Github</Button>
       </Link>
     </Flex>
   );
