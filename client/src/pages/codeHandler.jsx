@@ -10,14 +10,15 @@ const CodeHandler = () => {
   const [state, setState] = useState({
     error: false,
     isLoading: true,
+    success: false,
   });
 
   const toast = useToast();
-  const triggerToast = (title, description) => {
+  const triggerToast = (title, description, status) => {
     toast({
-      title: title,
-      description: description,
-      status: "error",
+      title,
+      description,
+      status,
       duration: 9000,
       isClosable: true,
     });
@@ -32,7 +33,12 @@ const CodeHandler = () => {
     sendCode(code, accounts_server)
       .then(async (response) => {
         if (response.status === 200) {
-          setState((state) => ({ ...state, isLoading: false, error: false }));
+          setState((state) => ({
+            ...state,
+            isLoading: false,
+            error: false,
+            success: true,
+          }));
         } else {
           setState((state) => ({
             ...state,
@@ -50,7 +56,7 @@ const CodeHandler = () => {
       });
   }, [code, accounts_server]);
 
-  const { error, isLoading } = state;
+  const { error, isLoading, success } = state;
 
   return (
     <Flex
@@ -63,11 +69,21 @@ const CodeHandler = () => {
       {error
         ? triggerToast(
             "An error has occurred",
-            "Could not connect account with GitHub"
+            "Could not connect account with GitHub",
+            "error"
+          )
+        : ""}
+      {success
+        ? triggerToast(
+            "Account connected successfully!",
+            "Enjoy your stay at fellowcomb :)",
+            "success"
           )
         : ""}
       {isLoading ? (
         <Spinner size="xl" speed="0.50s" color="yellow.500" />
+      ) : success ? (
+        "DISCORD"
       ) : (
         <Link style={{ textDecoration: "none" }} as={ReactLink} to="/">
           <Button colorScheme="yellow">Try Again!</Button>
