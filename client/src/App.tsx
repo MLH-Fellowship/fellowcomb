@@ -22,7 +22,7 @@ const App: React.FC = ({ user }) => {
         direction="column"
       >
         <Switch>
-          <AuthorizedRoute exact path="/" user={true} component={Home} />
+          <AuthorizedRoute exact path="/" user={false} component={Home} />
           <Route exact path="/authorize/github" component={CodeHandler} />
           <Route exact path="/auth" component={SignIn} />
         </Switch>
