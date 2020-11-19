@@ -1,15 +1,6 @@
 import React from "react";
 
-import {
-  Flex,
-  Link,
-  Icon,
-  Text,
-  Spacer,
-  HStack,
-  Divider,
-  Button,
-} from "@chakra-ui/react";
+import { Flex, Text, Spacer, Divider, Button } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa";
 import CAvatar from "./clickableAvatar";
 
