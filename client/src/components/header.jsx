@@ -8,11 +8,11 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Image,
+  Link,
 } from "@chakra-ui/react";
 
-// const searchBar = ({ sendSearch }) => (
-
-// );
+import Honeycomb from "../assets/Honeycomb.png";
 
 const Header = (props) => {
   const [search, setSearch] = useState("");
@@ -37,10 +37,13 @@ const Header = (props) => {
       {...props}
     >
       <Flex align="center" mr={5}>
-        <Heading as={ReactLink} to="/" size="lg" fontFamily="KoHo">
-          <span role="img" aria-label="fellowcomb">
+        <ReactLink to="/">
+          <Image src={Honeycomb} width="38px" px="3px" mx="4px" />
+        </ReactLink>
+        <Heading as={ReactLink} to="/" size="xl" fontFamily="KoHo">
+          {/* <span role="img" aria-label="fellowcomb">
             🍯
-          </span>{" "}
+          </span>{" "} */}
           fellowcomb
         </Heading>
       </Flex>
