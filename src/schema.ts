@@ -6,13 +6,31 @@ import path from "path"
 const User = objectType({
   name: "User",
   definition(t){
-    t.model.id()
+    t.model.id();
+    t.model.name();
+    t.model.pictureURL();
+    t.model.github_url();
+    t.model.username();
+    t.model.github_followers();
+    t.model.github_following();
+    t.model.discord_id();
   }
 })
 
 const Query = queryType({
   definition(t){
-    t.string("name")
+    t.field("token",{
+      type: "String",
+      resolve: (parent, args, context, info) => {
+        return context.token
+      }
+    }),
+    t.field("me", {
+      type: "User",
+      resolve: async (parent, args, context, info) => {
+        return await context.prisma.userSession.findOne({where: {id: context.token}}).user(); 
+      }
+    })
   }
 })
 

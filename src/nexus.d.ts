@@ -35,7 +35,14 @@ export interface NexusGenScalars {
 export interface NexusGenRootTypes {
   Query: {};
   User: { // root type
+    discord_id?: string | null; // String
+    github_followers: number; // Int!
+    github_following: number; // Int!
+    github_url: string; // String!
     id: string; // String!
+    name: string; // String!
+    pictureURL?: string | null; // String
+    username: string; // String!
   }
 }
 
@@ -49,19 +56,35 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 
 export interface NexusGenFieldTypes {
   Query: { // field return type
-    name: string | null; // String
+    me: NexusGenRootTypes['User'] | null; // User
+    token: string | null; // String
   }
   User: { // field return type
+    discord_id: string | null; // String
+    github_followers: number; // Int!
+    github_following: number; // Int!
+    github_url: string; // String!
     id: string; // String!
+    name: string; // String!
+    pictureURL: string | null; // String
+    username: string; // String!
   }
 }
 
 export interface NexusGenFieldTypeNames {
   Query: { // field return type name
-    name: 'String'
+    me: 'User'
+    token: 'String'
   }
   User: { // field return type name
+    discord_id: 'String'
+    github_followers: 'Int'
+    github_following: 'Int'
+    github_url: 'String'
     id: 'String'
+    name: 'String'
+    pictureURL: 'String'
+    username: 'String'
   }
 }
 

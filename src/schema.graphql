@@ -3,9 +3,17 @@
 
 
 type Query {
-  name: String
+  me: User
+  token: String
 }
 
 type User {
+  discord_id: String
+  github_followers: Int!
+  github_following: Int!
+  github_url: String!
   id: String!
+  name: String!
+  pictureURL: String
+  username: String!
 }
