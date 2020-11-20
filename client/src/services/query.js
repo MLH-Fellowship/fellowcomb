@@ -1,12 +1,12 @@
 import axios from "axios";
 import { CLIENT_URL, BACKEND_SERVER_URL } from "../constants";
 
-export const sendCode = (code) => {
+export const sendCode = (code, service) => {
   let redirect_uri;
   redirect_uri = CLIENT_URL;
-  redirect_uri = redirect_uri + `/authorize/github`;
+  redirect_uri = redirect_uri + `/authorize/${service}`;
   return axios({
-    url: `${BACKEND_SERVER_URL}/auth/github`,
+    url: `${BACKEND_SERVER_URL}/auth/${service}`,
     method: "post",
     data: {
       code,
