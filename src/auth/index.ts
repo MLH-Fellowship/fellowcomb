@@ -67,7 +67,7 @@ router.post("/github", async (req, res, next) => {
     console.log(isPartOfMLH);
 
     if (!isPartOfMLH) {
-      res.status(401).send("Unauthorised");
+      res.status(401).send({ error: "Unauthorised" });
       next();
       return;
     }
@@ -75,7 +75,11 @@ router.post("/github", async (req, res, next) => {
     const userFromDatabase = await prismaAuthClient.user.findOne({
       where: { username: login },
     });
+    // @yugi, I'm checking if it's a new user for now but we also want to check if discord_id doesn't exist
+    // and call them newUser as well
+    let newUser = false;
     if (userFromDatabase === null) {
+      newUser = true;
       const newCreatedUser = await prismaAuthClient.user.create({
         data: {
           username: login,
@@ -88,7 +92,7 @@ router.post("/github", async (req, res, next) => {
         },
       });
       const session = await createUserSession(newCreatedUser);
-      res.send(session.id);
+      res.send({ userId: session.id, newUser });
     } else {
       const existingSessions = await prismaAuthClient.user
         .findOne({ where: { id: userFromDatabase.id } })
@@ -101,17 +105,17 @@ router.post("/github", async (req, res, next) => {
         })
       );
       const session = await createUserSession(userFromDatabase);
-      res.send(session.id);
+      res.send({ userId: session.id, newUser });
     }
   } catch (e) {
     console.log(e);
-    res.status(401).send("Bad credentials");
+    res.status(401).send({ error: "Bad credentials" });
   }
   next();
 });
 
 router.post("/discord", async (req, res, next) => {
-  const { code, userSessionToken, tokenScope } = req.body;
+  const { code, userSessionToken, tokenScope, redirect_uri } = req.body;
 
   const data = {
     client_id: process.env.DISCORD_ID,
@@ -119,40 +123,47 @@ router.post("/discord", async (req, res, next) => {
     grant_type: "authorization_code",
     code,
     tokenScope,
+    redirect_uri,
   };
+  try {
+    const discord_auth_api = "https://discord.com/api/oauth2/token";
+    const discord_token_response = await axios.post(
+      discord_auth_api,
+      new URLSearchParams(data),
+      {
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
 
-  const discord_auth_api = "https://discord.com/api/oauth2/token";
-  const discord_token_response = await axios.post(
-    discord_auth_api,
-    new URLSearchParams(data),
-    {
+    const {
+      access_token,
+      token_type,
+      refresh_token,
+      scope,
+    } = discord_token_response.data;
+
+    const discord_api_me = "https://discord.com/api/users/@me";
+    const discordUser = axios.get(discord_api_me, {
       headers: {
-        accept: "application/json",
-        "Content-Type": "application/x-www-form-urlencoded",
+        authorization: `${token_type} ${access_token}`,
       },
-    }
-  );
-  const {
-    access_token,
-    token_type,
-    refresh_token,
-    scope,
-  } = discord_token_response.data;
+    });
 
-  const discord_api_me = "https://discord.com/api/users/@me";
-  const discordUser = axios.get(discord_api_me, {
-    headers: {
-      authorization: `${token_type} ${access_token}`,
-    },
-  });
-
-  const user = await prismaAuthClient.userSession
-    .findOne({ where: { id: userSessionToken } })
-    .user();
-  const updatedUser = await prismaAuthClient.user.update({
-    where: { id: user.id },
-    data: { discord_access_code: access_token },
-  });
+    const user = await prismaAuthClient.userSession
+      .findOne({ where: { id: userSessionToken } })
+      .user();
+    const updatedUser = await prismaAuthClient.user.update({
+      where: { id: user.id },
+      data: { discord_access_code: access_token },
+    });
+    res.status(200).send({ userId: userSessionToken });
+  } catch (e) {
+    console.log(e);
+    res.status(401).send({ error: "Bad credentials" });
+  }
 });
 
 export default router;

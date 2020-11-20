@@ -9,7 +9,7 @@ import Discord from "../components/discord";
 import { sendCode } from "../services/query";
 import { getQueryParams } from "../utils/url";
 
-import { useSetUser } from "../contexts/usercontext";
+import { useSetUser, useUser } from "../contexts/usercontext";
 
 const CodeHandler = () => {
   const [state, setState] = useState({
@@ -17,9 +17,10 @@ const CodeHandler = () => {
     isLoading: true,
     success: false,
     discord: false,
+    newUser: false,
   });
   const { service } = useParams();
-  console.log(service);
+  const userId = useUser();
   const toast = useToast();
   const triggerToast = ({ title, description, status }) => {
     toast({
@@ -53,22 +54,19 @@ const CodeHandler = () => {
 
   const setUser = useSetUser();
   useEffect(() => {
-    sendCode(code, service)
+    sendCode(code, service, userId)
       .then(async (response) => {
+        console.log(response);
         if (response.status === 200 && service === "github") {
-          window.localStorage.setItem("userId", response.data);
-          setUser(() => response.data);
+          window.localStorage.setItem("userId", response.data.userId);
+          setUser(() => response.data.userId);
           setState((state) => ({
             ...state,
             isLoading: false,
             error: false,
             success: true,
-          }));
-        } else if (service === "github") {
-          setState((state) => ({
-            ...state,
-            error: true,
-            isLoading: false,
+            discord: false,
+            newUser: response.data.newUser,
           }));
         } else if (response.status === 200 && service === "discord") {
           setState((state) => ({
@@ -76,6 +74,12 @@ const CodeHandler = () => {
             error: false,
             isLoading: false,
             discord: true,
+          }));
+        } else {
+          setState((state) => ({
+            ...state,
+            error: true,
+            isLoading: false,
           }));
         }
       })
@@ -88,7 +92,7 @@ const CodeHandler = () => {
       });
   }, [code]);
 
-  const { error, isLoading, success, discord } = state;
+  const { error, isLoading, success, discord, newUser } = state;
 
   return (
     <Flex
@@ -102,21 +106,25 @@ const CodeHandler = () => {
       {error
         ? triggerToast({
             title: "An error has occurred! 💔",
-            description: "Could not connect account with GitHub.",
+            description: "Could not connect with your account.",
             status: "error",
           })
         : ""}
       {success
         ? triggerToast({
-            title: "You're in! 🎉",
-            description: "Enjoy your stay at fellowcomb.",
+            title: "Success! 🎉",
+            description: "Account successfully linked.",
             status: "success",
           })
         : ""}
       {isLoading ? (
         <Spinner size="xl" speed="0.50s" color="yellow.500" />
       ) : success ? (
-        <Discord />
+        newUser ? (
+          <Discord />
+        ) : (
+          <Redirect to="/" />
+        )
       ) : (
         <Link style={{ textDecoration: "none" }} as={ReactLink} to="/">
           <Button colorScheme="yellow">Try Again!</Button>
