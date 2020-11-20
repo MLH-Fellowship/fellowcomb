@@ -10,6 +10,7 @@ import Header from "./components/header";
 import CodeHandler from "./pages/codeHandler";
 import Home from "./pages/home";
 import SignIn from "./pages/signin";
+import User from "./pages/user";
 
 import { useUser } from "./contexts/usercontext";
 
@@ -39,6 +40,13 @@ const App = () => {
             render={(props) => <CodeHandler {...props} />}
           />
           <Route exact path="/auth" component={SignIn} />
+          <Route
+            exact
+            path="/users/:username"
+            render={(props) =>
+              userId ? <User {...props} /> : <Redirect to="/auth" />
+            }
+          />
         </Switch>
       </Flex>
     </ChakraProvider>
