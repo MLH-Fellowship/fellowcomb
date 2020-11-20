@@ -43,7 +43,7 @@ const ClusterWrapper = ({ username, color, ...props }) => {
       });
     } else {
       toast({
-        title: "Error createing cluster",
+        title: "Error creating cluster",
         description: "Could not create the cluster, try again later...",
         status: "error",
         duration: 3000,
@@ -135,7 +135,7 @@ const ClusterWrapper = ({ username, color, ...props }) => {
                 onChange={(e) => setClusterName(e.target.value)}
               />
               <Button
-                colorScheme="yellow"
+                colorScheme={color}
                 onClick={createCluster}
                 isLoading={isCreating}
               >
