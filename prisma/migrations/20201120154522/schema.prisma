@@ -11,19 +11,29 @@ model User {
   id                  String        @id @default(cuid())
   username            String        @unique
   name                String
+  pictureURL          String?
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @default(now())
   deletedAt           DateTime?
+  github_url          String
+  github_followers    Int
+  github_following    Int
   github_access_code  String
   linkedin            String?
   calendly            String?
   discord_id          String?
   discord_access_code String?
   UserSessions        UserSession[]
+  clusters            Cluster[]
 }
 
 model UserSession {
   id     String @id @default(cuid())
   user   User   @relation(fields: [userId], references: [id])
   userId String
+}
+
+model Cluster {
+  id    String @id @default(cuid())
+  users User[]
 }

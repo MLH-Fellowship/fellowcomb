@@ -24,10 +24,16 @@ model User {
   discord_id          String?
   discord_access_code String?
   UserSessions        UserSession[]
+  clusters            Cluster[]
 }
 
 model UserSession {
   id     String @id @default(cuid())
   user   User   @relation(fields: [userId], references: [id])
   userId String
+}
+
+model Cluster {
+  id    String @id @default(cuid())
+  users User[]
 }
