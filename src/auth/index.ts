@@ -77,9 +77,7 @@ router.post("/github", async (req, res, next) => {
     });
     // @yugi, I'm checking if it's a new user for now but we also want to check if discord_id doesn't exist
     // and call them newUser as well
-    let newUser = false;
     if (userFromDatabase === null) {
-      newUser = true;
       const newCreatedUser = await prismaAuthClient.user.create({
         data: {
           username: login,
@@ -92,7 +90,7 @@ router.post("/github", async (req, res, next) => {
         },
       });
       const session = await createUserSession(newCreatedUser);
-      res.send({ userId: session.id, newUser });
+      res.send({ userId: session.id, newUser: true });
     } else {
       const existingSessions = await prismaAuthClient.user
         .findOne({ where: { id: userFromDatabase.id } })
@@ -105,7 +103,8 @@ router.post("/github", async (req, res, next) => {
         })
       );
       const session = await createUserSession(userFromDatabase);
-      res.send({ userId: session.id, newUser });
+      const discordConected = userFromDatabase.discord_id ? false : true;
+      res.send({ userId: session.id, newUser: discordConected });
     }
   } catch (e) {
     console.log(e);
@@ -146,18 +145,18 @@ router.post("/discord", async (req, res, next) => {
     } = discord_token_response.data;
 
     const discord_api_me = "https://discord.com/api/users/@me";
-    const discordUser = axios.get(discord_api_me, {
+    const discordUser = await axios.get(discord_api_me, {
       headers: {
         authorization: `${token_type} ${access_token}`,
       },
     });
-
+    const { id: discord_id, username } = discordUser.data;
     const user = await prismaAuthClient.userSession
       .findOne({ where: { id: userSessionToken } })
       .user();
     const updatedUser = await prismaAuthClient.user.update({
       where: { id: user.id },
-      data: { discord_access_code: access_token },
+      data: { discord_access_code: access_token, discord_id },
     });
     res.status(200).send({ userId: userSessionToken });
   } catch (e) {
