@@ -6,6 +6,8 @@ import { Link as ReactLink } from "react-router-dom";
 import { sendCode } from "../services/query";
 import { getQueryParams } from "../utils/url";
 
+import { useSetUser } from "../contexts/usercontext";
+
 const CodeHandler = () => {
   const [state, setState] = useState({
     error: false,
@@ -28,11 +30,13 @@ const CodeHandler = () => {
   const code = params.code;
   let accounts_server = params["accounts-server"];
   accounts_server = decodeURI(accounts_server);
-
+  const setUser = useSetUser();
   useEffect(() => {
     sendCode(code, accounts_server)
       .then(async (response) => {
         if (response.status === 200) {
+          window.localStorage.setItem("userId", response.data);
+          setUser(() => ({ userId: response.data }));
           setState((state) => ({
             ...state,
             isLoading: false,
@@ -68,15 +72,15 @@ const CodeHandler = () => {
     >
       {error
         ? triggerToast(
-            "An error has occurred",
-            "Could not connect account with GitHub",
+            "An error has occurred! 💔",
+            "Could not connect account with GitHub.",
             "error"
           )
         : ""}
       {success
         ? triggerToast(
-            "Account connected successfully!",
-            "Enjoy your stay at fellowcomb :)",
+            "You're in! 🎉",
+            "Enjoy your stay at fellowcomb.",
             "success"
           )
         : ""}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 
 import { ChakraProvider, Flex } from "@chakra-ui/react";
 
@@ -11,7 +11,10 @@ import CodeHandler from "./pages/codeHandler";
 import Home from "./pages/home";
 import SignIn from "./pages/signin";
 
-const App: React.FC = ({ user }) => {
+import { useUser } from "./contexts/usercontext";
+
+const App = () => {
+  const userId = useUser();
   return (
     <ChakraProvider resetCSS={true}>
       <Header />
@@ -22,7 +25,14 @@ const App: React.FC = ({ user }) => {
         direction="column"
       >
         <Switch>
-          <AuthorizedRoute exact path="/" user={false} component={Home} />
+          <Route
+            exact
+            path="/"
+            render={() => {
+              console.log(userId);
+              return userId ? <Home /> : <Redirect to="/auth" />;
+            }}
+          />
           <Route exact path="/authorize/github" component={CodeHandler} />
           <Route exact path="/auth" component={SignIn} />
         </Switch>

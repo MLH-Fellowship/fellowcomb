@@ -14,12 +14,16 @@ import {
 
 import Honeycomb from "../assets/Honeycomb.png";
 
+import { useSetUser } from "../contexts/usercontext";
+
 const Header = (props) => {
   const [search, setSearch] = useState("");
+  const setUser = useSetUser();
 
   const signOut = () => {
-    window.localStorage.removeItem("isLoggedIn");
-    window.localStorage.removeItem("user");
+    // TODO: make api call to delete user-session
+    setUser((preState) => ({ ...preState, userId: null }));
+    window.localStorage.removeItem("userId");
   };
 
   const sendSearch = (event) => {
@@ -84,7 +88,7 @@ const Header = (props) => {
               variant="outline"
               border="0px"
               mx={6}
-              onClick={() => signOut()}
+              onClick={signOut}
               colorScheme="yellow"
             >
               Sign Out

@@ -5,7 +5,6 @@ import {
   Link,
   Icon,
   Avatar,
-  Text,
   Spacer,
   HStack,
   Divider,
@@ -13,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { FaCalendarAlt, FaLinkedin, FaGithub, FaDiscord } from "react-icons/fa";
 
-const Profile = ({ user, color }) => {
+const Profile = ({ user, user: { color } }) => {
   const iconColor = `${color}.500`;
   const iconHoverColor = `${color}.400`;
   const disabledColor = "gray.400";

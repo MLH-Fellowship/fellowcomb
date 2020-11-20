@@ -5,7 +5,6 @@ import Honeycomb from "../assets/Honeycomb.png";
 
 const SignIn = () => {
   const { REACT_APP_GITHUB_CLIENT_ID } = process.env;
-
   return (
     <Flex
       width="full"
