@@ -140,6 +140,20 @@ const Header = (props) => {
                   </Button>
                 </InputRightElement>
               </InputGroup>
+
+              <Button
+                as={ReactLink}
+                to="/graph-view"
+                bg="transparent"
+                variant="outline"
+                border="0px"
+                ml={6}
+                onClick={() => signOut()}
+                colorScheme="yellow"
+              >
+                Explore
+              </Button>
+
               <Button
                 bg="transparent"
                 variant="outline"
