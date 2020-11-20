@@ -16,6 +16,28 @@ const User = objectType({
     t.model.linkedin();
     t.model.calendly();
     t.model.clusters();
+    t.field("podName", {
+      type: "User",
+      resolve: async (root, args, ctx) => {
+        const clusters = await ctx.prisma.user
+          .findOne({
+            where: { id: root.id },
+          })
+          .clusters();
+        const podName = clusters.reduce((prev, cluster) => {
+          const reg = /Pod (\d\.\d.\d)/g;
+          const matches = reg.exec(cluster.name);
+          if (matches.length > 0) {
+            return matches[1];
+          }
+          return prev;
+        }, "");
+        if (podName.length > 0) {
+          return podName;
+        }
+        return null;
+      },
+    });
   },
 });
 
@@ -26,6 +48,7 @@ const Cluster = objectType({
     t.model.name();
     t.model.roleId();
     t.model.users();
+    t.model.default();
   },
 });
 
