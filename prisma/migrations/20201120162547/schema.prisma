@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model User {
@@ -15,10 +15,13 @@ model User {
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @default(now())
   deletedAt           DateTime?
-  github_url          String?
+  github_url          String
+  github_followers    Int
+  github_following    Int
+  github_access_code  String
   linkedin            String?
   calendly            String?
-  discord_id          String        @unique
+  discord_id          String?
   discord_access_code String?
   UserSessions        UserSession[]
   clusters            Cluster[]

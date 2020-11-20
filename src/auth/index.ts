@@ -18,103 +18,103 @@ const createUserSession = (user) => {
   });
 };
 
-router.post("/github", async (req, res, next) => {
-  const { code } = req.body;
-  const github_access_token_url = "https://github.com/login/oauth/access_token";
+// router.post("/github", async (req, res, next) => {
+//   const { code } = req.body;
+//   const github_access_token_url = "https://github.com/login/oauth/access_token";
 
-  const github_access_token_request_params = {
-    client_id: process.env.GH_CLIENT_ID,
-    client_secret: process.env.GH_SECRET,
-    code,
-  };
-  const response = await axios.post(
-    github_access_token_url,
-    github_access_token_request_params,
-    { headers: { accept: "application/json" } }
-  );
-  const { access_token, scope, token_type } = response.data;
+//   const github_access_token_request_params = {
+//     client_id: process.env.GH_CLIENT_ID,
+//     client_secret: process.env.GH_SECRET,
+//     code,
+//   };
+//   const response = await axios.post(
+//     github_access_token_url,
+//     github_access_token_request_params,
+//     { headers: { accept: "application/json" } }
+//   );
+//   const { access_token, scope, token_type } = response.data;
 
-  try {
-    const user_api = "https://api.github.com/user";
-    const user = await axios.get(user_api, {
-      headers: { authorization: `token ${access_token}` },
-    });
-    const {
-      login,
-      avatar_url,
-      html_url,
-      name,
-      followers,
-      following,
-    } = user.data;
+//   try {
+//     const user_api = "https://api.github.com/user";
+//     const user = await axios.get(user_api, {
+//       headers: { authorization: `token ${access_token}` },
+//     });
+//     const {
+//       login,
+//       avatar_url,
+//       html_url,
+//       name,
+//       followers,
+//       following,
+//     } = user.data;
 
-    //Check if user is in MLH
-    const user_api_orgs = `https://api.github.com/users/${login}/orgs`;
-    const user_orgs_response = await axios.get(user_api_orgs, {
-      headers: {
-        authorization: `token ${access_token}`,
-        accept: "application/vnd.github.v3+json",
-      },
-    });
-    const user_orgs: any[] = user_orgs_response.data;
-    const isPartOfMLH = user_orgs.reduce<boolean>((acc, curr) => {
-      if (curr.login === "MLH-Fellowship") {
-        return true;
-      }
-      return acc;
-    }, false);
+//     //Check if user is in MLH
+//     const user_api_orgs = `https://api.github.com/users/${login}/orgs`;
+//     const user_orgs_response = await axios.get(user_api_orgs, {
+//       headers: {
+//         authorization: `token ${access_token}`,
+//         accept: "application/vnd.github.v3+json",
+//       },
+//     });
+//     const user_orgs: any[] = user_orgs_response.data;
+//     const isPartOfMLH = user_orgs.reduce<boolean>((acc, curr) => {
+//       if (curr.login === "MLH-Fellowship") {
+//         return true;
+//       }
+//       return acc;
+//     }, false);
 
-    console.log(isPartOfMLH);
+//     console.log(isPartOfMLH);
 
-    if (!isPartOfMLH) {
-      res.status(401).send({ error: "Unauthorised" });
-      next();
-      return;
-    }
+//     if (!isPartOfMLH) {
+//       res.status(401).send({ error: "Unauthorised" });
+//       next();
+//       return;
+//     }
 
-    const userFromDatabase = await prismaAuthClient.user.findOne({
-      where: { username: login },
-    });
-    // @yugi, I'm checking if it's a new user for now but we also want to check if discord_id doesn't exist
-    // and call them newUser as well
-    if (userFromDatabase === null) {
-      const newCreatedUser = await prismaAuthClient.user.create({
-        data: {
-          username: login,
-          name,
-          pictureURL: avatar_url,
-          github_url: html_url,
-          github_followers: followers,
-          github_following: following,
-          github_access_code: access_token,
-        },
-      });
-      const session = await createUserSession(newCreatedUser);
-      res.send({ userId: session.id, newUser: true });
-    } else {
-      const existingSessions = await prismaAuthClient.user
-        .findOne({ where: { id: userFromDatabase.id } })
-        .UserSessions();
-      await Promise.all(
-        existingSessions.map(async (session) => {
-          await prismaAuthClient.userSession.delete({
-            where: { id: session.id },
-          });
-        })
-      );
-      const session = await createUserSession(userFromDatabase);
-      const discordConected = userFromDatabase.discord_id ? false : true;
-      res.send({ userId: session.id, newUser: discordConected });
-    }
-  } catch (e) {
-    console.log(e);
-    res.status(401).send({ error: "Bad credentials" });
-  }
-  next();
-});
+//     const userFromDatabase = await prismaAuthClient.user.findOne({
+//       where: { username: login },
+//     });
+//     // @yugi, I'm checking if it's a new user for now but we also want to check if discord_id doesn't exist
+//     // and call them newUser as well
+//     if (userFromDatabase === null) {
+//       const newCreatedUser = await prismaAuthClient.user.create({
+//         data: {
+//           username: login,
+//           name,
+//           pictureURL: avatar_url,
+//           github_url: html_url,
+//           github_followers: followers,
+//           github_following: following,
+//           github_access_code: access_token,
+//         },
+//       });
+//       const session = await createUserSession(newCreatedUser);
+//       res.send({ userId: session.id, newUser: true });
+//     } else {
+//       const existingSessions = await prismaAuthClient.user
+//         .findOne({ where: { id: userFromDatabase.id } })
+//         .UserSessions();
+//       await Promise.all(
+//         existingSessions.map(async (session) => {
+//           await prismaAuthClient.userSession.delete({
+//             where: { id: session.id },
+//           });
+//         })
+//       );
+//       const session = await createUserSession(userFromDatabase);
+//       const discordConected = userFromDatabase.discord_id ? false : true;
+//       res.send({ userId: session.id, newUser: discordConected });
+//     }
+//   } catch (e) {
+//     console.log(e);
+//     res.status(401).send({ error: "Bad credentials" });
+//   }
+//   next();
+// });
 
 router.post("/discord", async (req, res, next) => {
-  const { code, userSessionToken, tokenScope, redirect_uri } = req.body;
+  const { code, tokenScope, redirect_uri, name } = req.body;
 
   const data = {
     client_id: process.env.DISCORD_ID,
@@ -150,15 +150,42 @@ router.post("/discord", async (req, res, next) => {
         authorization: `${token_type} ${access_token}`,
       },
     });
+    console.log(discordUser.data);
+
     const { id: discord_id, username } = discordUser.data;
-    const user = await prismaAuthClient.userSession
-      .findOne({ where: { id: userSessionToken } })
-      .user();
-    const updatedUser = await prismaAuthClient.user.update({
-      where: { id: user.id },
-      data: { discord_access_code: access_token, discord_id },
+    const userFromDatabase = await prismaAuthClient.user.findOne({
+      where: { username },
     });
-    res.status(200).send({ userId: userSessionToken });
+
+    if (userFromDatabase === null) {
+      const newCreatedUser = await prismaAuthClient.user.create({
+        data: {
+          username,
+          name: username,
+          discord_id,
+          discord_access_code: access_token,
+        },
+      });
+      const session = await createUserSession(newCreatedUser);
+      res.send({ userId: session.id, newUser: true });
+    } else {
+      const existingSessions = await prismaAuthClient.user
+        .findOne({ where: { id: userFromDatabase.id } })
+        .UserSessions();
+      await Promise.all(
+        existingSessions.map(async (session) => {
+          await prismaAuthClient.userSession.delete({
+            where: { id: session.id },
+          });
+        })
+      );
+      await prismaAuthClient.user.update({
+        where: { id: userFromDatabase.id },
+        data: { discord_access_code: access_token },
+      });
+      const session = await createUserSession(userFromDatabase);
+      res.send({ userId: session.id });
+    }
   } catch (e) {
     console.log(e);
     res.status(401).send({ error: "Bad credentials" });
