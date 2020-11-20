@@ -21,7 +21,7 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import {BACKEND_SERVER_URL} from "./constants"
+import { BACKEND_SERVER_URL } from "./constants";
 
 const App = () => {
   const userId = useUser();
@@ -72,6 +72,7 @@ const App = () => {
                 userId ? <User {...props} /> : <Redirect to="/auth" />
               }
             />
+            <Route exact path="/graph-view" component={GraphView} />
             <Route component={ErrorPage} />
           </Switch>
         </Flex>

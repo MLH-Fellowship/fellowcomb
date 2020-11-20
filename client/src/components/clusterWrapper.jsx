@@ -62,11 +62,6 @@ const ClusterWrapper = ({ username, color, ...props }) => {
   const clusters = [
     {
       name: "Pod 1.0.3",
-      users: ["jcs98", "flozender", "utkarsh867"],
-      defaultCluster: true,
-    },
-    {
-      name: "Jest",
       users: [
         "jcs98",
         "flozender",
