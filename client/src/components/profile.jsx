@@ -22,7 +22,6 @@ import {
   Text,
   useToast,
   Box,
-
 } from "@chakra-ui/react";
 import { FaCalendarAlt, FaLinkedin, FaGithub, FaDiscord } from "react-icons/fa";
 
@@ -38,12 +37,19 @@ const Profile = ({ user, user: { color } }) => {
   const disabledColor = "gray.400";
 
   const addOrOpen = (type, currentUrl) => {
-    if (currentUrl && user.guest) {
-      window.location.href = currentUrl;
+    // guest
+    if (user.guest) {
+      if (currentUrl) {
+        window.location.href = currentUrl;
+      }
     } else {
-      if (user.guest) return;
-      setSocialType(type);
-      onOpen();
+      // self
+      if (type === "GitHub" || type === "Discord")
+        window.location.href = currentUrl;
+      else {
+        setSocialType(type);
+        onOpen();
+      }
     }
   };
 
@@ -99,7 +105,11 @@ const Profile = ({ user, user: { color } }) => {
                   placeholder="eg. https://  ..."
                   onChange={(e) => setSocialValue(e.target.value)}
                 />
-                <Button colorScheme={user.color} onClick={updateDetails} isLoading={isUpdating}>
+                <Button
+                  colorScheme={user.color}
+                  onClick={updateDetails}
+                  isLoading={isUpdating}
+                >
                   Save
                 </Button>
               </Stack>
