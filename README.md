@@ -18,6 +18,8 @@ The recent need for free agents could also be easily fulfilled up by fellowcomb,
 
 <img src="./assets/user.png" alt="user">
 
+<hr>
+
 <img src="./assets/explore.png" alt="explore">
 
 ## How we built it
