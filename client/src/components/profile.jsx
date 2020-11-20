@@ -20,7 +20,9 @@ import {
   ModalBody,
   ModalCloseButton,
   Text,
+  useToast,
   Box,
+
 } from "@chakra-ui/react";
 import { FaCalendarAlt, FaLinkedin, FaGithub, FaDiscord } from "react-icons/fa";
 
@@ -28,6 +30,8 @@ const Profile = ({ user, user: { color } }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [socialType, setSocialType] = useState("");
   const [socialValue, setSocialValue] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
+  const toast = useToast();
 
   const iconColor = `${color}.500`;
   const iconHoverColor = `${color}.400`;
@@ -43,9 +47,34 @@ const Profile = ({ user, user: { color } }) => {
     }
   };
 
-  const updateDetails = (type, url) => {
+  const updateDetails = () => {
+    if (!(socialType && socialValue)) return;
     // TODO api request to update url
     console.log(socialType + ":" + socialValue);
+    setIsUpdating(true);
+
+    const success = false;
+    if (success) {
+      toast({
+        title: "Details updated",
+        description: "Your details were updated successfully!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Error updating details",
+        description: "Could not update your details, try again later...",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+
+    setIsUpdating(false);
+    setSocialType("");
+    setSocialValue("");
     onClose();
   };
   return (
@@ -63,13 +92,14 @@ const Profile = ({ user, user: { color } }) => {
             <ModalHeader>Update your details</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Stack spacing="4">
+              <Stack spacing="2" mb="2">
                 <Text>{socialType} url</Text>
                 <Input
                   label="url"
+                  placeholder="eg. https://  ..."
                   onChange={(e) => setSocialValue(e.target.value)}
                 />
-                <Button colorScheme={user.color} onClick={updateDetails}>
+                <Button colorScheme={user.color} onClick={updateDetails} isLoading={isUpdating}>
                   Save
                 </Button>
               </Stack>
