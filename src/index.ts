@@ -7,6 +7,8 @@ import http from 'http';
 import { createContext } from './context';
 import {schema} from "./schema"
 import auth from "./auth";
+import { applyMiddleware } from "graphql-middleware";
+import { permissions } from './shield/permissions';
 
 const app = express();
 
@@ -15,7 +17,7 @@ app.use(express.json())
 app.use("/auth", auth);
 
 const apolloServer = new ApolloServer({
-  schema,
+  schema: applyMiddleware(schema, permissions),
   context: createContext
 });
 
