@@ -10,8 +10,10 @@ import Home from "./pages/home";
 import SignIn from "./pages/signin";
 import User from "./pages/user";
 import ErrorPage from "./pages/error";
+import GraphView from "./pages/graphView";
 
 import { useUser } from "./contexts/usercontext";
+
 import {
   ApolloClient,
   ApolloProvider,
