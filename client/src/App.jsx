@@ -12,6 +12,7 @@ import User from "./pages/user";
 import ErrorPage from "./pages/error";
 
 import { useUser } from "./contexts/usercontext";
+import GraphView from "./pages/graphView";
 
 const App = () => {
   const userId = useUser();
@@ -46,6 +47,7 @@ const App = () => {
               userId ? <User {...props} /> : <Redirect to="/auth" />
             }
           />
+          <Route exact path="/graph-view" component={GraphView} />
           <Route component={ErrorPage} />
         </Switch>
       </Flex>
