@@ -41,21 +41,24 @@ client.on("ready", async () => {
       //For each member
       await Promise.all(
         memberForRoles.map(async (member) => {
+          console.log(member.user.username);
           const userFromDB = await prismaDiscordClient.user.findOne({
             where: { discord_id: member.user.id },
           });
+          console.log(userFromDB);
           if (userFromDB) {
             //Connect the user to the role if user exists
-            await prismaDiscordClient.cluster
+            const usersFromRole = await prismaDiscordClient.cluster
               .findOne({ where: { roleId: role.id } })
               .users();
+            const oldConnections = usersFromRole.map((userFromRole) => ({
+              id: userFromRole.id,
+            }));
             await prismaDiscordClient.cluster.update({
               where: { roleId: role.id },
               data: {
                 users: {
-                  connect: {
-                    id: userFromDB.id,
-                  },
+                  connect: [...oldConnections, { id: userFromDB.id }],
                 },
               },
             });
@@ -67,9 +70,7 @@ client.on("ready", async () => {
                 discord_id: member.user.id,
                 name: member.user.username,
                 clusters: {
-                  connect: {
-                    id: role.id,
-                  },
+                  connect: [{ roleId: role.id }],
                 },
               },
             });
