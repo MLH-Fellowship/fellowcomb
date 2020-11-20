@@ -1,8 +1,6 @@
 # Fellowcomb 🍯
 
-<p align="center">
-    <img align="center" src="./assets/poster.png" alt="fellowcomb">
-</p>
+<img src="./assets/poster.png" alt="fellowcomb">
 
 ## Inspiration
 
@@ -15,6 +13,12 @@ Fellowcomb connects to your Discord account to gain basic information about you 
 Clusters can also be ephemeral, you can have a cluster for people who are up for some video games (eg. Among Us), where people come in and out based on their availability, and people who follow the cluster can at once glance discover all the people available for their next game! Joining a cluster will also give you access to the cluster's private discord channel.
 
 The recent need for free agents could also be easily fulfilled up by fellowcomb, with all free agents in a "Free Agent" cluster.
+
+## Explore, Connect, Follow and more!
+
+<img src="./assets/user.png" alt="user">
+
+<img src="./assets/explore.png" alt="explore">
 
 ## How we built it
 
