@@ -16,3 +16,13 @@ export const sendCode = (code, service, userId) => {
     },
   });
 };
+
+export const createDM = (userId) => {
+  return axios({
+    url: `https://www.discord.com/api/users/@me/channels`,
+    method: "post",
+    data: {
+      recipient_id: userId,
+    },
+  });
+};

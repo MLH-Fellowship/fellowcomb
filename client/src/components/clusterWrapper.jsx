@@ -19,13 +19,12 @@ import {
 import Cluster from "../components/cluster";
 import { FaPlus } from "react-icons/fa";
 
-const ClusterWrapper = ({ username, color, ...props }) => {
-  const getClusters = (username) => alert("Give us the API yugi!");
+const ClusterWrapper = ({ username, color, clusters, ...props }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [clusterName, setClusterName] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const toast = useToast();
-
+  console.log(clusters);
   const createCluster = () => {
     if (!clusterName) return;
     setIsCreating(true);
@@ -56,57 +55,7 @@ const ClusterWrapper = ({ username, color, ...props }) => {
     onClose();
   };
 
-  //   const clusters = getClusters(username);
-
-  //   dummy array
-  const clusters = [
-    {
-      name: "Pod 1.0.3",
-      users: [
-        "jcs98",
-        "flozender",
-        "utkarsh867",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-        "jcs98",
-      ],
-    },
-    { name: "Jest", users: ["jcs98", "flozender"] },
-    { name: "Jest", users: ["jcs98", "flozender", "utkarsh867"] },
-    { name: "Jest", users: ["jcs98", "flozender"] },
-    { name: "Jest", users: ["jcs98", "flozender"] },
-    { name: "Jest", users: ["jcs98", "flozender"] },
-    { name: "Jest", users: ["jcs98", "flozender"] },
-  ];
+  if (!clusters) return;
   return (
     <>
       <Flex width="6xl" direction="column">
@@ -127,7 +76,7 @@ const ClusterWrapper = ({ username, color, ...props }) => {
         </Flex>
         <Box maxH="50vh" overflowY="scroll">
           {clusters.map((cluster, key) => (
-            <Cluster data={cluster} {...props} key={key} />
+            <Cluster color={color} data={cluster} {...props} key={key} />
           ))}
         </Box>
       </Flex>
