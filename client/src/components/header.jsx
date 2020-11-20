@@ -19,6 +19,7 @@ import {
   useDisclosure,
   Divider,
   Avatar,
+  useToast,
 } from "@chakra-ui/react";
 
 import Honeycomb from "../assets/Honeycomb.png";
@@ -63,6 +64,7 @@ const Header = (props) => {
   const [searchResult, setSearchResult] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const setUser = useSetUser();
+  const toast = useToast();
 
   const signOut = () => {
     // TODO: make api call to delete user-session
@@ -71,7 +73,15 @@ const Header = (props) => {
   };
 
   const sendSearch = (event) => {
-    if (!search) return;
+    if (!search) {
+      toast({
+        title: "Please enter a search query",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     // TODO make the search request
     // set result and open modal on success
     setSearchResult(dummyResult);
@@ -154,6 +164,7 @@ const Header = (props) => {
           <ModalBody>
             {searchResult.map((user) => (
               <SearchResultItem
+                key={user.id}
                 user={user}
                 onClose={onClose}
                 setSearch={setSearch}

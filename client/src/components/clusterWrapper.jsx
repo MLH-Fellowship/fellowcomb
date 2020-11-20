@@ -14,6 +14,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  useToast,
 } from "@chakra-ui/react";
 import Cluster from "../components/cluster";
 import { FaPlus } from "react-icons/fa";
@@ -22,14 +23,37 @@ const ClusterWrapper = ({ username, color, ...props }) => {
   const getClusters = (username) => alert("Give us the API yugi!");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [clusterName, setClusterName] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
+  const toast = useToast();
 
   const createCluster = () => {
-    if (clusterName) {
-      console.log(clusterName);
-      // TODO api request to create cluster
-      setClusterName("");
-      onClose();
+    if (!clusterName) return;
+    setIsCreating(true);
+    // TODO api request to create cluster
+    console.log(clusterName);
+
+    const success = false;
+    if (success) {
+      toast({
+        title: "New cluster created",
+        description: "A new cluster was created successfully!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Error createing cluster",
+        description: "Could not create the cluster, try again later...",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
+
+    setIsCreating(false);
+    setClusterName("");
+    onClose();
   };
 
   //   const clusters = getClusters(username);
@@ -110,7 +134,11 @@ const ClusterWrapper = ({ username, color, ...props }) => {
                 placeholder="eg. Hiking"
                 onChange={(e) => setClusterName(e.target.value)}
               />
-              <Button colorScheme="yellow" onClick={createCluster}>
+              <Button
+                colorScheme="yellow"
+                onClick={createCluster}
+                isLoading={isCreating}
+              >
                 Create
               </Button>
             </Stack>
