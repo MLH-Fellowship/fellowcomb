@@ -61,10 +61,11 @@ const Profile = ({ user, user: { color } }) => {
             <ModalHeader>Update your details</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Stack spacing="4">
+              <Stack spacing="2" mb="2">
                 <Text>{socialType} url</Text>
                 <Input
                   label="url"
+                  placeholder="eg. https://  ..."
                   onChange={(e) => setSocialValue(e.target.value)}
                 />
                 <Button colorScheme="yellow" onClick={updateDetails}>
