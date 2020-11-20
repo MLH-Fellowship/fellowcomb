@@ -3,14 +3,13 @@ import { Route, Switch, Redirect } from "react-router-dom";
 
 import { ChakraProvider, Flex } from "@chakra-ui/react";
 
-import AuthorizedRoute from "./components/authRoute";
-
 import Header from "./components/header";
 
 import CodeHandler from "./pages/codeHandler";
 import Home from "./pages/home";
 import SignIn from "./pages/signin";
 import User from "./pages/user";
+import ErrorPage from "./pages/error";
 
 import { useUser } from "./contexts/usercontext";
 
@@ -47,6 +46,7 @@ const App = () => {
               userId ? <User {...props} /> : <Redirect to="/auth" />
             }
           />
+          <Route component={ErrorPage} />
         </Switch>
       </Flex>
     </ChakraProvider>
