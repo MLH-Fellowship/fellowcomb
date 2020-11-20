@@ -21,6 +21,8 @@ import {
   ModalCloseButton,
   Text,
   useToast,
+  Box,
+
 } from "@chakra-ui/react";
 import { FaCalendarAlt, FaLinkedin, FaGithub, FaDiscord } from "react-icons/fa";
 
@@ -36,9 +38,10 @@ const Profile = ({ user, user: { color } }) => {
   const disabledColor = "gray.400";
 
   const addOrOpen = (type, currentUrl) => {
-    if (currentUrl) {
+    if (currentUrl && user.guest) {
       window.location.href = currentUrl;
     } else {
+      if (user.guest) return;
       setSocialType(type);
       onOpen();
     }
@@ -74,14 +77,14 @@ const Profile = ({ user, user: { color } }) => {
     setSocialValue("");
     onClose();
   };
-
   return (
     <>
       <Flex w="6xl" align="center" direction="row" py="8">
         <Avatar size="2xl" background={iconColor} />
-        <Heading ml="8" size="xl">
-          {user.name}
-        </Heading>
+        <Box ml="8">
+          <Heading size="xl">{user.name}</Heading>
+          <Text fontSize="xl">{user.username}</Text>
+        </Box>
         <Spacer />
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
@@ -96,59 +99,64 @@ const Profile = ({ user, user: { color } }) => {
                   placeholder="eg. https://  ..."
                   onChange={(e) => setSocialValue(e.target.value)}
                 />
-                <Button
-                  colorScheme="yellow"
-                  onClick={updateDetails}
-                  isLoading={isUpdating}
-                >
+                <Button colorScheme={user.color} onClick={updateDetails} isLoading={isUpdating}>
                   Save
                 </Button>
               </Stack>
             </ModalBody>
           </ModalContent>
         </Modal>
-        <HStack spacing="4">
-          <Link onClick={() => addOrOpen("Calendly", user.calendly)}>
-            <Icon
-              as={FaCalendarAlt}
-              boxSize="6"
-              color={user.calendly ? iconColor : disabledColor}
-              _hover={{
-                color: user.calendly ? iconHoverColor : disabledColor,
-              }}
-            />
-          </Link>
-          <Link onClick={() => addOrOpen("LinkedIn", user.linkedin)}>
-            <Icon
-              as={FaLinkedin}
-              boxSize="6"
-              color={user.linkedin ? iconColor : disabledColor}
-              _hover={{
-                color: user.linkedin ? iconHoverColor : disabledColor,
-              }}
-            />
-          </Link>
-          <Link onClick={() => addOrOpen("GitHub", user.github)}>
-            <Icon
-              as={FaGithub}
-              boxSize="6"
-              color={user.github ? iconColor : disabledColor}
-              _hover={{
-                color: user.github ? iconHoverColor : disabledColor,
-              }}
-            />
-          </Link>
-          <Link onClick={() => addOrOpen("Discord", user.discord)}>
-            <Icon
-              as={FaDiscord}
-              boxSize="6"
-              color={user.discord ? iconColor : disabledColor}
-              _hover={{
-                color: user.discord ? iconHoverColor : disabledColor,
-              }}
-            />
-          </Link>
-        </HStack>
+        <Box>
+          {user.guest ? (
+            <Button width="full" my="2vh" colorScheme={user.color}>
+              CHAT
+            </Button>
+          ) : (
+            ""
+          )}
+          <HStack spacing="4">
+            <Link onClick={() => addOrOpen("Calendly", user.calendly)}>
+              <Icon
+                as={FaCalendarAlt}
+                boxSize="6"
+                color={user.calendly ? iconColor : disabledColor}
+                _hover={{
+                  color: user.calendly ? iconHoverColor : disabledColor,
+                }}
+              />
+            </Link>
+            <Link onClick={() => addOrOpen("LinkedIn", user.linkedin)}>
+              <Icon
+                as={FaLinkedin}
+                boxSize="6"
+                color={user.linkedin ? iconColor : disabledColor}
+                _hover={{
+                  color: user.linkedin ? iconHoverColor : disabledColor,
+                }}
+              />
+            </Link>
+            <Link onClick={() => addOrOpen("GitHub", user.github)}>
+              <Icon
+                as={FaGithub}
+                boxSize="6"
+                color={user.github ? iconColor : disabledColor}
+                _hover={{
+                  color: user.github ? iconHoverColor : disabledColor,
+                }}
+              />
+            </Link>
+            <Link onClick={() => addOrOpen("Discord", user.discord)}>
+              <Icon
+                as={FaDiscord}
+                boxSize="6"
+                color={user.discord ? iconColor : disabledColor}
+                _hover={{
+                  color: user.discord ? iconHoverColor : disabledColor,
+                }}
+              />
+            </Link>
+          </HStack>
+        </Box>
       </Flex>
       <Divider w="6xl" css={{ borderWidth: "2px" }} />
     </>
