@@ -2,16 +2,39 @@
 ### Do not make changes to this file directly
 
 
+type Cluster {
+  id: String!
+  name: String!
+  roleId: String!
+  users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int): [User!]!
+}
+
+input ClusterWhereUniqueInput {
+  id: String
+  name: String
+  roleId: String
+}
+
 type Query {
   me: User
   token: String
+  user(username: String): User
 }
 
 type User {
+  calendly: String
+  clusters(after: ClusterWhereUniqueInput, before: ClusterWhereUniqueInput, first: Int, last: Int): [Cluster!]!
   discord_id: String!
   github_url: String
   id: String!
+  linkedin: String
   name: String!
   pictureURL: String
   username: String!
+}
+
+input UserWhereUniqueInput {
+  discord_id: String
+  id: String
+  username: String
 }

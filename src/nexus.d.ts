@@ -19,6 +19,16 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  ClusterWhereUniqueInput: { // input type
+    id?: string | null; // String
+    name?: string | null; // String
+    roleId?: string | null; // String
+  }
+  UserWhereUniqueInput: { // input type
+    discord_id?: string | null; // String
+    id?: string | null; // String
+    username?: string | null; // String
+  }
 }
 
 export interface NexusGenEnums {
@@ -33,11 +43,18 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenRootTypes {
+  Cluster: { // root type
+    id: string; // String!
+    name: string; // String!
+    roleId: string; // String!
+  }
   Query: {};
   User: { // root type
+    calendly?: string | null; // String
     discord_id: string; // String!
     github_url?: string | null; // String
     id: string; // String!
+    linkedin?: string | null; // String
     name: string; // String!
     pictureURL?: string | null; // String
     username: string; // String!
@@ -45,6 +62,8 @@ export interface NexusGenRootTypes {
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
+  ClusterWhereUniqueInput: NexusGenInputs['ClusterWhereUniqueInput'];
+  UserWhereUniqueInput: NexusGenInputs['UserWhereUniqueInput'];
   String: NexusGenScalars['String'];
   Int: NexusGenScalars['Int'];
   Float: NexusGenScalars['Float'];
@@ -53,14 +72,24 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 }
 
 export interface NexusGenFieldTypes {
+  Cluster: { // field return type
+    id: string; // String!
+    name: string; // String!
+    roleId: string; // String!
+    users: NexusGenRootTypes['User'][]; // [User!]!
+  }
   Query: { // field return type
     me: NexusGenRootTypes['User'] | null; // User
     token: string | null; // String
+    user: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
+    calendly: string | null; // String
+    clusters: NexusGenRootTypes['Cluster'][]; // [Cluster!]!
     discord_id: string; // String!
     github_url: string | null; // String
     id: string; // String!
+    linkedin: string | null; // String
     name: string; // String!
     pictureURL: string | null; // String
     username: string; // String!
@@ -68,14 +97,24 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  Cluster: { // field return type name
+    id: 'String'
+    name: 'String'
+    roleId: 'String'
+    users: 'User'
+  }
   Query: { // field return type name
     me: 'User'
     token: 'String'
+    user: 'User'
   }
   User: { // field return type name
+    calendly: 'String'
+    clusters: 'Cluster'
     discord_id: 'String'
     github_url: 'String'
     id: 'String'
+    linkedin: 'String'
     name: 'String'
     pictureURL: 'String'
     username: 'String'
@@ -83,6 +122,27 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Cluster: {
+    users: { // args
+      after?: NexusGenInputs['UserWhereUniqueInput'] | null; // UserWhereUniqueInput
+      before?: NexusGenInputs['UserWhereUniqueInput'] | null; // UserWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+  }
+  Query: {
+    user: { // args
+      username?: string | null; // String
+    }
+  }
+  User: {
+    clusters: { // args
+      after?: NexusGenInputs['ClusterWhereUniqueInput'] | null; // ClusterWhereUniqueInput
+      before?: NexusGenInputs['ClusterWhereUniqueInput'] | null; // ClusterWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+  }
 }
 
 export interface NexusGenAbstractResolveReturnTypes {
@@ -90,9 +150,9 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Query" | "User";
+export type NexusGenObjectNames = "Cluster" | "Query" | "User";
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = "ClusterWhereUniqueInput" | "UserWhereUniqueInput";
 
 export type NexusGenEnumNames = never;
 
