@@ -40,7 +40,7 @@ const App = () => {
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
   });
-
+  console.log("APP", userId);
   return (
     <ApolloProvider client={client}>
       <ChakraProvider resetCSS={true}>

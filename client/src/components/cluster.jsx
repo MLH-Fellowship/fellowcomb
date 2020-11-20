@@ -25,20 +25,19 @@ import { FaPlus } from "react-icons/fa";
 import CAvatar from "./clickableAvatar";
 
 const Member = ({ user, onClose }) => {
-  const { id, name, color } = user;
+  const { id, name, username, color } = user;
 
   return (
     <>
       <Divider />
-      <ReactLink to={`/users/${id}`} onClick={onClose}>
+      <ReactLink to={`/users/${username}`} onClick={onClose}>
         <Flex direction="row" align="center" p="4">
           <Avatar mr="4" background={color} />
           <Text fontSize="lg" color="black">
-            {/* {name} */}
-            {user}
+            {name}
           </Text>
           <Text fontSize="sm" color="gray.500" ml="2">
-            ({id})
+            ({username})
           </Text>
         </Flex>
       </ReactLink>
@@ -88,6 +87,17 @@ const Cluster = ({ data, color }) => {
 
   // TODO: decide if the user is following this cluster
   let action = "unfollow";
+  const colors = [
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "teal",
+    "blue",
+    "cyan",
+    "purple",
+    "pink",
+  ];
   return (
     <>
       <Box px="4">
@@ -122,7 +132,13 @@ const Cluster = ({ data, color }) => {
           {users.slice(0, MEMBERS_TO_SHOW).map((user, key) => (
             <WrapItem key={key}>
               <Box>
-                <CAvatar user={user} color="gray.400" size="md" />
+                <CAvatar
+                  user={user.username}
+                  name={user.name}
+                  pfp={user.pictureURL}
+                  color={`gray.400`}
+                  size="md"
+                />
               </Box>
             </WrapItem>
           ))}
@@ -144,8 +160,8 @@ const Cluster = ({ data, color }) => {
           <ModalHeader>Members in {name}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {users.map((user) => (
-              <Member key={user.id} user={user} onClose={onClose} />
+            {users.map((user, id) => (
+              <Member key={id} user={user} onClose={onClose} />
             ))}
           </ModalBody>
         </ModalContent>

@@ -24,8 +24,9 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { FaCalendarAlt, FaLinkedin, FaGithub, FaDiscord } from "react-icons/fa";
+import { createDM } from "../services/query";
 
-const Profile = ({ user, user: { color } }) => {
+const Profile = ({ user, user: { color, discord_id } }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [socialType, setSocialType] = useState("");
   const [socialValue, setSocialValue] = useState("");
@@ -44,8 +45,7 @@ const Profile = ({ user, user: { color } }) => {
       }
     } else {
       // self
-      if (type === "GitHub" || type === "Discord")
-        window.location.href = currentUrl;
+      if (type === "Discord") window.location.href = currentUrl;
       else {
         setSocialType(type);
         onOpen();
@@ -83,6 +83,13 @@ const Profile = ({ user, user: { color } }) => {
     setSocialValue("");
     onClose();
   };
+
+  const callCreateDM = (discord_id) => {
+    // createDM(discord_id).then((response) => {
+    //   console.log(response.data);
+    // });
+    window.location.href = `https://discordapp.com/users/${discord_id}`;
+  };
   return (
     <>
       <Flex w="6xl" align="center" direction="row" py="8">
@@ -118,7 +125,12 @@ const Profile = ({ user, user: { color } }) => {
         </Modal>
         <Box>
           {user.guest ? (
-            <Button width="full" my="2vh" colorScheme={user.color}>
+            <Button
+              width="full"
+              my="2vh"
+              colorScheme={user.color}
+              onClick={() => callCreateDM(discord_id)}
+            >
               CHAT
             </Button>
           ) : (
