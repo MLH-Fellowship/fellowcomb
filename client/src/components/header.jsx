@@ -31,12 +31,19 @@ const dummyResult = [
   { id: "utkarsh867", name: "Utkarsh Goel", pfp: "", color: "orange.600" },
 ];
 
-const SearchResultItem = ({ user, onClose }) => {
+const SearchResultItem = ({ user, onClose, setSearch, setSearchResult }) => {
   const { id, name, color } = user;
   return (
     <>
       <Divider />
-      <ReactLink to={`/users/${id}`} onClick={onClose}>
+      <ReactLink
+        to={`/users/${id}`}
+        onClick={() => {
+          onClose();
+          setSearch("");
+          setSearchResult([]);
+        }}
+      >
         <Flex direction="row" align="center" p="4">
           <Avatar mr="4" background={color} />
           <Text fontSize="lg" color="black">
@@ -64,6 +71,7 @@ const Header = (props) => {
   };
 
   const sendSearch = (event) => {
+    if (!search) return;
     // TODO make the search request
     // set result and open modal on success
     setSearchResult(dummyResult);
@@ -104,6 +112,7 @@ const Header = (props) => {
                   type="text"
                   placeholder="Find People..."
                   onChange={handleChange}
+                  value={search}
                   focusBorderColor="yellow.500"
                 />
                 <InputRightElement width="4.5rem">
@@ -144,7 +153,12 @@ const Header = (props) => {
           <ModalCloseButton />
           <ModalBody>
             {searchResult.map((user) => (
-              <SearchResultItem user={user} onClose={onClose} />
+              <SearchResultItem
+                user={user}
+                onClose={onClose}
+                setSearch={setSearch}
+                setSearchResult={setSearchResult}
+              />
             ))}
           </ModalBody>
         </ModalContent>
