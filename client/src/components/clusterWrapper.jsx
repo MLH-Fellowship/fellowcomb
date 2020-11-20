@@ -55,8 +55,8 @@ const ClusterWrapper = ({ username, ...props }) => {
         {`${username}'s clusters`}
       </Heading>
       <Box maxH="50vh" overflowY="scroll">
-        {clusters.map((cluster) => (
-          <Cluster data={cluster} {...props} />
+        {clusters.map((cluster, key) => (
+          <Cluster data={cluster} {...props} key={key} />
         ))}
       </Box>
     </Flex>

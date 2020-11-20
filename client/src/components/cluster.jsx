@@ -44,8 +44,8 @@ const Cluster = ({ data, color }) => {
         align="center"
         direction="row"
       >
-        {users.map((user) => (
-          <WrapItem>
+        {users.map((user, key) => (
+          <WrapItem key={key}>
             <Box>
               <CAvatar user={user} color="gray.400" size="md" />
             </Box>

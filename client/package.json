@@ -2,7 +2,6 @@
   "name": "react-client-example",
   "version": "1.0.1",
   "private": true,
-  "proxy": "http://localhost:4000",
   "devDependencies": {
     "@graphql-cli/codegen": "1.17.10",
     "@graphql-codegen/add": "2.0.1",

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link as ReactLink, redirect } from "react-router-dom";
+import { Link as ReactLink } from "react-router-dom";
 
 import {
   Flex,
@@ -39,14 +39,12 @@ const SearchResultItem = ({ user, onClose }) => {
       <ReactLink to={`/users/${id}`} onClick={onClose}>
         <Flex direction="row" align="center" p="4">
           <Avatar mr="4" background={color} />
-          {/* <Flex direction="row"> */}
           <Text fontSize="lg" color="black">
             {name}
           </Text>
           <Text fontSize="sm" color="gray.500" ml="2">
             ({id})
           </Text>
-          {/* </Flex> */}
         </Flex>
       </ReactLink>
     </>
@@ -61,7 +59,7 @@ const Header = (props) => {
 
   const signOut = () => {
     // TODO: make api call to delete user-session
-    setUser((preState) => ({ ...preState, userId: null }));
+    setUser(() => null);
     window.localStorage.removeItem("userId");
   };
 

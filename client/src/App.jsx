@@ -15,6 +15,7 @@ import { useUser } from "./contexts/usercontext";
 
 const App = () => {
   const userId = useUser();
+  console.log("APP", userId);
   return (
     <ChakraProvider resetCSS={true}>
       <Header />
@@ -28,10 +29,9 @@ const App = () => {
           <Route
             exact
             path="/"
-            render={() => {
-              console.log(userId);
-              return userId ? <Home /> : <Redirect to="/auth" />;
-            }}
+            render={(props) =>
+              userId ? <Home {...props} /> : <Redirect to="/auth" />
+            }
           />
           <Route exact path="/authorize/github" component={CodeHandler} />
           <Route exact path="/auth" component={SignIn} />

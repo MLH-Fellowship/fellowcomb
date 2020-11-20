@@ -19,6 +19,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  Text,
 } from "@chakra-ui/react";
 import { FaCalendarAlt, FaLinkedin, FaGithub, FaDiscord } from "react-icons/fa";
 

@@ -16,27 +16,43 @@ const CodeHandler = () => {
   });
 
   const toast = useToast();
-  const triggerToast = (title, description, status) => {
+  const triggerToast = ({ title, description, status }) => {
     toast({
-      title,
-      description,
-      status,
+      title: title,
+      description: description,
+      status: status,
       duration: 9000,
       isClosable: true,
     });
   };
 
+  // const [toastMessage, setToastMessage] = useState(undefined);
+  // const toast = useToast();
+
+  // useEffect(() => {
+  //   if (toastMessage) {
+  //     const { title, body, status } = toastMessage;
+
+  //     toast({
+  //       title,
+  //       description: body,
+  //       status: status,
+  //       duration: 9000,
+  //       isClosable: true,
+  //     });
+  //   }
+  // }, [toastMessage, toast]);
+
   const params = getQueryParams();
   const code = params.code;
-  let accounts_server = params["accounts-server"];
-  accounts_server = decodeURI(accounts_server);
+
   const setUser = useSetUser();
   useEffect(() => {
-    sendCode(code, accounts_server)
+    sendCode(code)
       .then(async (response) => {
         if (response.status === 200) {
           window.localStorage.setItem("userId", response.data);
-          setUser(() => ({ userId: response.data }));
+          setUser(() => response.data);
           setState((state) => ({
             ...state,
             isLoading: false,
@@ -58,7 +74,7 @@ const CodeHandler = () => {
           isLoading: false,
         }));
       });
-  }, [code, accounts_server]);
+  }, [code]);
 
   const { error, isLoading, success } = state;
 
@@ -71,18 +87,18 @@ const CodeHandler = () => {
       height="80vh"
     >
       {error
-        ? triggerToast(
-            "An error has occurred! 💔",
-            "Could not connect account with GitHub.",
-            "error"
-          )
+        ? triggerToast({
+            title: "An error has occurred! 💔",
+            description: "Could not connect account with GitHub.",
+            status: "error",
+          })
         : ""}
       {success
-        ? triggerToast(
-            "You're in! 🎉",
-            "Enjoy your stay at fellowcomb.",
-            "success"
-          )
+        ? triggerToast({
+            title: "You're in! 🎉",
+            description: "Enjoy your stay at fellowcomb.",
+            status: "success",
+          })
         : ""}
       {isLoading ? (
         <Spinner size="xl" speed="0.50s" color="yellow.500" />
