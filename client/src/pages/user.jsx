@@ -3,6 +3,7 @@ import { Flex, Spinner, useToast } from "@chakra-ui/react";
 import { useParams } from "react-router";
 import Profile from "../components/profile";
 import ClusterWrapper from "../components/clusterWrapper";
+import PodData from "../components/podData";
 
 import { USER } from "../gql/user";
 import { ME } from "../gql/me";
@@ -71,6 +72,7 @@ const User = () => {
           discord_id: currentUser.discord_id,
         }}
       />
+      <PodData />
       <ClusterWrapper
         username={currentUser.username}
         clusters={currentUser.clusters}
