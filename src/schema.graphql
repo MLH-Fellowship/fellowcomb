@@ -3,6 +3,7 @@
 
 
 type Cluster {
+  default: Boolean!
   id: String!
   name: String!
   roleId: String!
@@ -31,6 +32,7 @@ type User {
   linkedin: String
   name: String!
   pictureURL: String
+  podName: String
   username: String!
 }
 

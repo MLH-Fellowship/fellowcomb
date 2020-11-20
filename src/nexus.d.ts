@@ -44,6 +44,7 @@ export interface NexusGenScalars {
 
 export interface NexusGenRootTypes {
   Cluster: { // root type
+    default: boolean; // Boolean!
     id: string; // String!
     name: string; // String!
     roleId: string; // String!
@@ -73,6 +74,7 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 
 export interface NexusGenFieldTypes {
   Cluster: { // field return type
+    default: boolean; // Boolean!
     id: string; // String!
     name: string; // String!
     roleId: string; // String!
@@ -93,12 +95,14 @@ export interface NexusGenFieldTypes {
     linkedin: string | null; // String
     name: string; // String!
     pictureURL: string | null; // String
+    podName: string | null; // String
     username: string; // String!
   }
 }
 
 export interface NexusGenFieldTypeNames {
   Cluster: { // field return type name
+    default: 'Boolean'
     id: 'String'
     name: 'String'
     roleId: 'String'
@@ -119,6 +123,7 @@ export interface NexusGenFieldTypeNames {
     linkedin: 'String'
     name: 'String'
     pictureURL: 'String'
+    podName: 'String'
     username: 'String'
   }
 }
