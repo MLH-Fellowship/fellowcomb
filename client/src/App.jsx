@@ -33,7 +33,11 @@ const App = () => {
               userId ? <Home {...props} /> : <Redirect to="/auth" />
             }
           />
-          <Route exact path="/authorize/github" component={CodeHandler} />
+          <Route
+            exact
+            path="/authorize/:service"
+            render={(props) => <CodeHandler {...props} />}
+          />
           <Route exact path="/auth" component={SignIn} />
         </Switch>
       </Flex>
