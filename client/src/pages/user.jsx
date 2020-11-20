@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Flex } from "@chakra-ui/react";
 import { useParams } from "react-router";
-
 import Profile from "../components/profile";
 import ClusterWrapper from "../components/clusterWrapper";
 import { useUsername } from "../contexts/usercontext";
+import {ME} from "../gql/me";
+import { useQuery } from '@apollo/react-hooks';
 
 const User = () => {
   const color = "red";
@@ -12,6 +13,16 @@ const User = () => {
   const myUsername = useUsername();
   const guest = myUsername !== username;
 
+  const {
+    loading: meLoading,
+    error: meError,
+    data: userData
+  } = useQuery(ME);
+
+  useEffect(() => {
+    console.log(userData)
+  }, [userData])
+  
   return (
     <Flex width="90vw" align="center" direction="column">
       <Profile
