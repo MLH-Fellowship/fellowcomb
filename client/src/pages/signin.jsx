@@ -4,7 +4,6 @@ import { Flex, Box, Heading, Image, Button, Link } from "@chakra-ui/react";
 import Honeycomb from "../assets/Honeycomb.png";
 
 const SignIn = () => {
-  const { REACT_APP_GITHUB_CLIENT_ID } = process.env;
   return (
     <Flex
       width="full"
@@ -21,9 +20,9 @@ const SignIn = () => {
       </Box>
       <Link
         style={{ textDecoration: "none" }}
-        href={`https://github.com/login/oauth/authorize?scope=user&client_id=${REACT_APP_GITHUB_CLIENT_ID}`}
+        href="https://discord.com/api/oauth2/authorize?client_id=778655560777465876&permissions=0&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauthorize%2Fdiscord&response_type=code&scope=guilds.join%20identify%20guilds%20bot"
       >
-        <Button colorScheme="yellow">Continue with Github</Button>
+        <Button colorScheme="yellow">Continue with Discord</Button>
       </Link>
     </Flex>
   );
