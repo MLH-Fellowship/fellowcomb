@@ -180,7 +180,7 @@ const Profile = ({ user, user: { color, discord_id } }) => {
           </HStack>
         </Box>
       </Flex>
-      <Divider w="6xl" css={{ borderWidth: "2px" }} />
+      <Divider w="6xl" />
     </>
   );
 };

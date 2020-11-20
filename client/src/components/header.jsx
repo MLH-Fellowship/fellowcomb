@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link as ReactLink } from "react-router-dom";
+import { SEARCH } from "../gql/search";
+import { useLazyQuery } from "@apollo/react-hooks";
 
 import {
   Flex,
@@ -26,23 +28,22 @@ import Honeycomb from "../assets/Honeycomb.png";
 
 import { useSetUser } from "../contexts/usercontext";
 
-const dummyResult = [
-  { id: "jcs98", name: "Jainam Shah", pfp: "", color: "tomato" },
-  { id: "flozender", name: "Tayeeb Flozender", pfp: "", color: "teal.500" },
-  { id: "utkarsh867", name: "Utkarsh Goel", pfp: "", color: "orange.600" },
-];
+// const dummyResult = [
+//   { id: "jcs98", name: "Jainam Shah", pfp: "", color: "tomato" },
+//   { id: "flozender", name: "Tayeeb Flozender", pfp: "", color: "teal.500" },
+//   { id: "utkarsh867", name: "Utkarsh Goel", pfp: "", color: "orange.600" },
+// ];
 
 const SearchResultItem = ({ user, onClose, setSearch, setSearchResult }) => {
-  const { id, name, color } = user;
+  const { id, username, name, color } = user;
   return (
     <>
       <Divider />
       <ReactLink
-        to={`/users/${id}`}
+        to={`/users/${username}`}
         onClick={() => {
           onClose();
           setSearch("");
-          setSearchResult([]);
         }}
       >
         <Flex direction="row" align="center" p="4">
@@ -51,7 +52,7 @@ const SearchResultItem = ({ user, onClose, setSearch, setSearchResult }) => {
             {name}
           </Text>
           <Text fontSize="sm" color="gray.500" ml="2">
-            ({id})
+            ({username})
           </Text>
         </Flex>
       </ReactLink>
@@ -60,8 +61,12 @@ const SearchResultItem = ({ user, onClose, setSearch, setSearchResult }) => {
 };
 
 const Header = (props) => {
+  const [
+    makeSearchQuery,
+    { loading: searchLoading, error: searchError, data: searchData },
+  ] = useLazyQuery(SEARCH);
+
   const [search, setSearch] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const setUser = useSetUser();
   const toast = useToast();
@@ -83,12 +88,18 @@ const Header = (props) => {
       return;
     }
     // TODO make the search request
+    makeSearchQuery({ variables: { search } });
     // set result and open modal on success
-    setSearchResult(dummyResult);
+    console.log(searchData);
     onOpen();
   };
 
   const handleChange = (event) => setSearch(event.target.value);
+
+  if (searchLoading) {
+    return <></>;
+  }
+
   return (
     <>
       <Flex
@@ -176,15 +187,15 @@ const Header = (props) => {
           <ModalHeader>Search results for "{search}"</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {searchResult.map((user) => (
-              <SearchResultItem
-                key={user.id}
-                user={user}
-                onClose={onClose}
-                setSearch={setSearch}
-                setSearchResult={setSearchResult}
-              />
-            ))}
+            {searchData &&
+              searchData.search.map((user, id) => (
+                <SearchResultItem
+                  key={id}
+                  user={user}
+                  onClose={onClose}
+                  setSearch={setSearch}
+                />
+              ))}
           </ModalBody>
         </ModalContent>
       </Modal>
