@@ -56,6 +56,22 @@ const Query = queryType({
         });
       },
     });
+    t.list.field("search", {
+      type: "User",
+      args: {
+        searchquery: stringArg(),
+      },
+      resolve: async (parent, args, context, info) => {
+        return await context.prisma.user.findMany({
+          where: {
+            OR: [
+              { username: { contains: args.searchquery } },
+              { name: { contains: args.searchquery } },
+            ],
+          },
+        });
+      },
+    });
   },
 });
 

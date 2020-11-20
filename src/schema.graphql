@@ -17,6 +17,7 @@ input ClusterWhereUniqueInput {
 
 type Query {
   me: User
+  search(searchquery: String): [User]
   token: String
   user(username: String): User
 }

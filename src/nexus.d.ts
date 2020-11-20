@@ -80,6 +80,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     me: NexusGenRootTypes['User'] | null; // User
+    search: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     token: string | null; // String
     user: NexusGenRootTypes['User'] | null; // User
   }
@@ -105,6 +106,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     me: 'User'
+    search: 'User'
     token: 'String'
     user: 'User'
   }
@@ -131,6 +133,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    search: { // args
+      searchquery?: string | null; // String
+    }
     user: { // args
       username?: string | null; // String
     }
