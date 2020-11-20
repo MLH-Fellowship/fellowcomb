@@ -8,10 +8,8 @@ type Query {
 }
 
 type User {
-  discord_id: String
-  github_followers: Int!
-  github_following: Int!
-  github_url: String!
+  discord_id: String!
+  github_url: String
   id: String!
   name: String!
   pictureURL: String

@@ -1,0 +1,32 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "DeleteField",
+      "model": "User",
+      "field": "github_followers"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "User",
+      "field": "github_following"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "User",
+      "field": "github_access_code"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "User",
+      "field": "github_url",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "User",
+      "field": "discord_id",
+      "arity": "Required"
+    }
+  ]
+}
