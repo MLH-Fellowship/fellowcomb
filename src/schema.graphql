@@ -30,9 +30,11 @@ type User {
   github_url: String
   id: String!
   linkedin: String
+  mentors: [User]
   name: String!
   pictureURL: String
-  podName: String
+  podLeaders: [User]
+  podName: [String]
   username: String!
 }
 

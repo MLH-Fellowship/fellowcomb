@@ -6,14 +6,12 @@ const serverId = "778274100191821834";
 
 client.on("ready", async () => {
   const prismaDiscordClient = new PrismaClient();
-
   const guild = client.guilds.cache.get(serverId);
-
   const serverRoles = guild.roles.cache.map((role) => ({
     id: role.id,
     name: role.name,
   }));
-
+  await guild.members.fetch();
   await Promise.all(
     serverRoles.map(async (serverRole) => {
       const serverRoleExists = await prismaDiscordClient.cluster.findOne({
@@ -30,22 +28,17 @@ client.on("ready", async () => {
     })
   );
 
-  console.log("Loaded the roles");
-
   await Promise.all(
     //Loop over server roles
     serverRoles.map(async (role) => {
       //Get all members for the role
-      console.log("Connecting roles and users");
       const memberForRoles = await guild.roles.cache.get(role.id).members;
       //For each member
       await Promise.all(
         memberForRoles.map(async (member) => {
-          console.log(member.user.username);
           const userFromDB = await prismaDiscordClient.user.findOne({
             where: { discord_id: member.user.id },
           });
-          console.log(userFromDB);
           if (userFromDB) {
             //Connect the user to the role if user exists
             const usersFromRole = await prismaDiscordClient.cluster
@@ -79,8 +72,6 @@ client.on("ready", async () => {
       );
     })
   );
-
-  console.log("Started bot process and fetched data");
 });
 
 export const startBotProcess = () => {

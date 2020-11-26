@@ -16,6 +16,84 @@ const User = objectType({
     t.model.linkedin();
     t.model.calendly();
     t.model.clusters();
+    t.list.field("podName", {
+      type: "String",
+      resolve: async (parent, args, context, info) => {
+        const clusters = await context.prisma.user
+          .findOne({
+            where: { id: parent.id },
+          })
+          .clusters();
+        const allPods = clusters.reduce((accumulator, cluster) => {
+          const re = /^Pod (\d+\.\d+\.\d+)/;
+          const matches = re.exec(cluster.name);
+          if (matches) {
+            accumulator.push(cluster.name);
+          }
+          return accumulator;
+        }, []);
+        return allPods;
+      },
+    });
+    t.list.field("podLeaders", {
+      type: User,
+      resolve: async (parent, args, context, info) => {
+        const clusters = await context.prisma.user
+          .findOne({
+            where: { id: parent.id },
+          })
+          .clusters();
+        const allPods: string[] = clusters.reduce((accumulator, cluster) => {
+          const re = /^Pod (\d+\.\d+\.\d+)/;
+          const matches = re.exec(cluster.name);
+          if (matches) {
+            accumulator.push(matches[1]);
+          }
+          return accumulator;
+        }, []);
+        if (allPods.length === 1) {
+          const batch = allPods[0].split(".")[0];
+          const thisPodLeader = await context.prisma.user.findMany({
+            where: {
+              AND: [
+                { clusters: { some: { name: `Pod Leader (Batch ${batch})` } } },
+                { clusters: { some: { name: `Pod ${allPods[0]}` } } },
+              ],
+            },
+          });
+          return thisPodLeader;
+        }
+        return [];
+      },
+    });
+    t.list.field("mentors", {
+      type: "User",
+      resolve: async (parent, args, context, info) => {
+        const clusters = await context.prisma.user
+          .findOne({
+            where: { id: parent.id },
+          })
+          .clusters();
+        const allPods: string[] = clusters.reduce((accumulator, cluster) => {
+          const re = /^Pod (\d+\.\d+\.\d+)/;
+          const matches = re.exec(cluster.name);
+          if (matches) {
+            accumulator.push(matches[1]);
+          }
+          return accumulator;
+        }, []);
+        if (allPods.length === 1) {
+          const batch = allPods[0].split(".")[0];
+          const thisPodLeader = await context.prisma.user.findMany({
+            where: {
+              clusters: { some: { name: `Mentor (Batch ${batch})` } },
+            },
+          });
+          return thisPodLeader;
+        }
+        return [];
+      },
+    });
   },
 });
 

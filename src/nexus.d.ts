@@ -93,9 +93,11 @@ export interface NexusGenFieldTypes {
     github_url: string | null; // String
     id: string; // String!
     linkedin: string | null; // String
+    mentors: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     name: string; // String!
     pictureURL: string | null; // String
-    podName: string | null; // String
+    podLeaders: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    podName: Array<string | null> | null; // [String]
     username: string; // String!
   }
 }
@@ -121,8 +123,10 @@ export interface NexusGenFieldTypeNames {
     github_url: 'String'
     id: 'String'
     linkedin: 'String'
+    mentors: 'User'
     name: 'String'
     pictureURL: 'String'
+    podLeaders: 'User'
     podName: 'String'
     username: 'String'
   }
