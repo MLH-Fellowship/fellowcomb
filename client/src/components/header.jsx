@@ -35,7 +35,7 @@ import { useSetUser } from "../contexts/usercontext";
 // ];
 
 const SearchResultItem = ({ user, onClose, setSearch, setSearchResult }) => {
-  const { id, username, name, color } = user;
+  const { username, name, color } = user;
   return (
     <>
       <Divider />
@@ -97,6 +97,9 @@ const Header = (props) => {
   const handleChange = (event) => setSearch(event.target.value);
 
   if (searchLoading) {
+    return <></>;
+  } else if (searchError) {
+    console.log(searchError);
     return <></>;
   }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Heading, Image } from "@chakra-ui/react";
+import { Heading, Image } from "@chakra-ui/react";
 
 const ErrorPage = () => {
   return (

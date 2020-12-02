@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link as ReactLink } from "react-router-dom";
 
 import {
@@ -8,8 +8,6 @@ import {
   Spacer,
   Divider,
   Button,
-  Wrap,
-  WrapItem,
   useToast,
   Modal,
   ModalOverlay,
@@ -19,20 +17,22 @@ import {
   ModalCloseButton,
   useDisclosure,
   Avatar,
+  AvatarGroup,
   Link,
+  Tooltip,
+  Image,
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa";
-import CAvatar from "./clickableAvatar";
 
 const Member = ({ user, onClose }) => {
-  const { id, name, username, color } = user;
+  const { name, username, color, pictureURL } = user;
 
   return (
     <>
       <Divider />
       <ReactLink to={`/users/${username}`} onClick={onClose}>
         <Flex direction="row" align="center" p="4">
-          <Avatar mr="4" background={color} />
+          <Avatar mr="4" background={color} src={pictureURL} />
           <Text fontSize="lg" color="black">
             {name}
           </Text>
@@ -45,21 +45,27 @@ const Member = ({ user, onClose }) => {
   );
 };
 
+const UserAvatar = ({ to, src, name }) => (
+  <Tooltip label={name} shouldWrapChildren={false}>
+    <ReactLink to={to}>
+      <Image as={Avatar} src={src} name={name} showBorder={true} />
+    </ReactLink>
+  </Tooltip>
+);
+
 const Cluster = ({ data, color }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const MEMBERS_TO_SHOW = 30;
 
   const follow = (action) => {
     // TODO handle API call here
     const success = true;
     let message;
-    if (success && action == "follow") {
+    if (success && action === "follow") {
       message = {
         title: "Followed cluster! ✨",
         status: "success",
       };
-    } else if (success && action == "unfollow") {
+    } else if (success && action === "unfollow") {
       message = {
         title: "Unfollowed cluster.",
         status: "success",
@@ -87,21 +93,10 @@ const Cluster = ({ data, color }) => {
 
   // TODO: decide if the user is following this cluster
   let action = "unfollow";
-  const colors = [
-    "red",
-    "orange",
-    "yellow",
-    "green",
-    "teal",
-    "blue",
-    "cyan",
-    "purple",
-    "pink",
-  ];
   return (
     <>
-      <Box px="4">
-        <Flex mt="4" mb="2" width="full" align="center" direction="row">
+      <Box>
+        <Flex mt="4" mb="2" align="center" direction="row">
           <Link onClick={onOpen}>
             <Text fontSize="xl">{name}</Text>
           </Link>
@@ -121,33 +116,24 @@ const Cluster = ({ data, color }) => {
           )}
         </Flex>
         <Divider />
-        <Wrap
-          spacing="4"
-          mt="4"
-          mb="8"
-          width="full"
-          align="center"
-          direction="row"
-        >
-          {users.slice(0, MEMBERS_TO_SHOW).map((user, key) => (
-            <WrapItem key={key}>
-              <Box>
-                <CAvatar
-                  user={user.username}
-                  name={user.name}
-                  pfp={user.pictureURL}
-                  color={`gray.400`}
-                  size="md"
-                />
-              </Box>
-            </WrapItem>
-          ))}
-          {users.length > MEMBERS_TO_SHOW ? (
-            <Link ml="2" mt="2" color="blue.500" fontSize="lg" onClick={onOpen}>
-              +{users.length - MEMBERS_TO_SHOW} members
-            </Link>
-          ) : null}
-        </Wrap>
+        <Box py={4} width="100%">
+          <AvatarGroup size="md" max={15}>
+            {users.map((user) => (
+              <Avatar
+                to={`/users/${user.username}`}
+                size={"lg"}
+                background={"gray.400"}
+                icon={
+                  <UserAvatar
+                    to={`/users/${user.username}`}
+                    src={user.pictureURL}
+                    name={user.name}
+                  />
+                }
+              />
+            ))}
+          </AvatarGroup>
+        </Box>
       </Box>
       <Modal
         isOpen={isOpen}

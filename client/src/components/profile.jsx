@@ -92,8 +92,13 @@ const Profile = ({ user, user: { color, discord_id } }) => {
   };
   return (
     <>
-      <Flex w="6xl" align="center" direction="row" py="8">
-        <Avatar size="2xl" background={iconColor} />
+      <Flex w="100%" align="center" direction="row" py="8">
+        <Avatar
+          size="2xl"
+          background={iconColor}
+          src={user.pictureURL}
+          name={user.name}
+        />
         <Box ml="8">
           <Heading size="xl">{user.name}</Heading>
           <Text fontSize="xl">{user.username}</Text>
@@ -160,7 +165,7 @@ const Profile = ({ user, user: { color, discord_id } }) => {
             <Link onClick={() => addOrOpen("GitHub", user.github)}>
               <Icon
                 as={FaGithub}
-                boxSize="6"
+                boxSize="4em"
                 color={user.github ? iconColor : disabledColor}
                 _hover={{
                   color: user.github ? iconHoverColor : disabledColor,
@@ -180,7 +185,6 @@ const Profile = ({ user, user: { color, discord_id } }) => {
           </HStack>
         </Box>
       </Flex>
-      <Divider w="6xl" />
     </>
   );
 };

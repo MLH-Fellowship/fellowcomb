@@ -46,10 +46,12 @@ const App = () => {
       <ChakraProvider resetCSS={true}>
         <Header />
         <Flex
-          width="full"
+          maxW="6xl"
           align="center"
           justifyContent="center"
           direction="column"
+          margin="auto"
+          px={10}
         >
           <Switch>
             <Route

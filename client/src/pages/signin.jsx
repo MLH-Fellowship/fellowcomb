@@ -1,9 +1,14 @@
 import React from "react";
-
+import { useLocation } from "react-router-dom";
 import { Flex, Box, Heading, Image, Button, Link } from "@chakra-ui/react";
 import Honeycomb from "../assets/Honeycomb.png";
 
 const SignIn = () => {
+  const { protocol, host } = window.location;
+  const redirect_uri = encodeURIComponent(
+    `${protocol}//${host}/authorize/discord`
+  );
+
   return (
     <Flex
       width="full"
@@ -20,7 +25,7 @@ const SignIn = () => {
       </Box>
       <Link
         style={{ textDecoration: "none" }}
-        href="https://discord.com/api/oauth2/authorize?client_id=778655560777465876&permissions=0&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauthorize%2Fdiscord&response_type=code&scope=guilds.join%20identify%20guilds"
+        href={`https://discord.com/api/oauth2/authorize?client_id=778655560777465876&permissions=0&redirect_uri=${redirect_uri}&response_type=code&scope=guilds.join%20identify%20guilds`}
       >
         <Button colorScheme="yellow">Continue with Discord</Button>
       </Link>

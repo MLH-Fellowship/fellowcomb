@@ -59,9 +59,9 @@ const CodeHandler = () => {
           isLoading: false,
         }));
       });
-  }, [code]);
+  }, [code, service, setUser, userId]);
 
-  const { error, isLoading, success, discord, newUser } = state;
+  const { error, isLoading, success } = state;
 
   return (
     <Flex

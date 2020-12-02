@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Flex, Spinner, useToast } from "@chakra-ui/react";
+import React from "react";
+import { Box, Flex, Spinner, useToast } from "@chakra-ui/react";
 import { useParams } from "react-router";
 import Profile from "../components/profile";
 import ClusterWrapper from "../components/clusterWrapper";
@@ -58,21 +58,28 @@ const User = () => {
   const currentUser = userData.user;
 
   return (
-    <Flex width="90vw" align="center" direction="column">
-      <Profile
-        user={{
-          username: currentUser.username,
-          guest,
-          name: currentUser.name,
-          calendly: "",
-          linkedin: "",
-          github: currentUser.github_url,
-          discord: `https://discordapp.com/users/${currentUser.discord_id}`,
-          color: color,
-          discord_id: currentUser.discord_id,
-        }}
-      />
-      <PodData />
+    <Flex w="100%" align="center" direction="column">
+      <Box w="100%" p={10} backgroundColor="gray.50" borderRadius={14}>
+        <Profile
+          user={{
+            username: currentUser.username,
+            guest,
+            name: currentUser.name,
+            calendly: currentUser.calendly || "",
+            linkedin: currentUser.linkedin || "",
+            github: currentUser.github_url,
+            discord: `https://discordapp.com/users/${currentUser.discord_id}`,
+            color: color,
+            discord_id: currentUser.discord_id,
+            pictureURL: currentUser.pictureURL,
+          }}
+        />
+        <PodData
+          podLeaders={currentUser.podLeaders}
+          mentors={currentUser.mentors}
+        />
+      </Box>
+
       <ClusterWrapper
         username={currentUser.username}
         clusters={currentUser.clusters}

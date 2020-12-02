@@ -58,23 +58,14 @@ const ClusterWrapper = ({ username, color, clusters, ...props }) => {
   if (!clusters) return;
   return (
     <>
-      <Flex width="6xl" direction="column">
-        <Flex align="center" mt="8" mb="4">
-          <Heading width="full" size="lg">
-            {`${username}'s clusters`}
-          </Heading>
-          <Spacer />
-          <Button
-            leftIcon={<FaPlus />}
-            colorScheme={color}
-            onClick={onOpen}
-            size="sm"
-            mt="4"
-          >
+      <Flex direction="column" width="100%">
+        <Flex align="baseline" my="8" justifyContent="space-between">
+          <Heading>Groups</Heading>
+          <Button leftIcon={<FaPlus />} colorScheme={color} onClick={onOpen}>
             New
           </Button>
         </Flex>
-        <Box maxH="50vh" overflowY="scroll">
+        <Box>
           {clusters.map((cluster, key) => (
             <Cluster color={color} data={cluster} {...props} key={key} />
           ))}

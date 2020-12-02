@@ -1,15 +1,16 @@
 import React from "react";
 import { Link as ReactLink } from "react-router-dom";
-import { Box, Avatar, Text } from "@chakra-ui/react";
+import { Box, Avatar, AvatarBadge, Text } from "@chakra-ui/react";
 
-const CAvatar = ({ user, color, size, pfp, name }) => {
+const CAvatar = ({ user, color, size, name, pictureURL }) => {
   return (
-    <ReactLink to={`/users/${user}`}>
-      <Box align="center" justifyContent="center">
-        <Avatar size={size} background={color} />
-        <Text>{name}</Text>
-      </Box>
-    </ReactLink>
+    <Avatar
+      as={ReactLink}
+      to={`/users/${user}`}
+      size={"md"}
+      background={"gray.400"}
+      src={user.pictureURL || null}
+    />
   );
 };
 

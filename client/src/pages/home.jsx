@@ -10,8 +10,13 @@ const Home = (props) => {
     ME
   );
 
-  if (userLoading)
+  if (userLoading) {
     return <Spinner size="xl" speed="0.50s" color="yellow.500" />;
+  } else if (userError) {
+    console.log(userError);
+    return <></>;
+  }
+
   console.log(userData);
   const currentUser = userData.me;
   console.log("HOME", currentUser.username);

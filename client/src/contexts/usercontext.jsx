@@ -1,6 +1,4 @@
 import React, { useContext, useState } from "react";
-import { ME } from "../gql/me";
-import { useQuery } from "@apollo/react-hooks";
 
 let initial_state = {
   userId: null,

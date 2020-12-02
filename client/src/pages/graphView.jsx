@@ -73,7 +73,6 @@ const GraphView = () => {
     // directed: true,
     automaticRearrangeAfterDropNode: true,
     collapsible: true,
-    height: 400,
     highlightDegree: 2,
     highlightOpacity: 0.2,
     linkHighlightBehavior: true,

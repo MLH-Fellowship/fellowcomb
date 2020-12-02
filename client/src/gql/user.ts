@@ -6,6 +6,10 @@ export const USER = gql`
       name
       discord_id
       username
+      github_url
+      calendly
+      linkedin
+      pictureURL
       clusters {
         name
         users {
@@ -13,6 +17,16 @@ export const USER = gql`
           pictureURL
           name
         }
+      }
+      podLeaders {
+        name
+        username
+        pictureURL
+      }
+      mentors {
+        name
+        username
+        pictureURL
       }
     }
   }

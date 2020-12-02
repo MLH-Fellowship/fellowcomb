@@ -2,16 +2,16 @@ require("dotenv").config();
 import * as Discord from "discord.js";
 import { PrismaClient } from "@prisma/client";
 const client = new Discord.Client();
-const serverId = "778274100191821834";
+const serverId = "716052909271285803";
 
-client.on("ready", async () => {
-  const prismaDiscordClient = new PrismaClient();
+async function discordTask(prismaDiscordClient) {
+  console.log("Starting the discord task.");
   const guild = client.guilds.cache.get(serverId);
   const serverRoles = guild.roles.cache.map((role) => ({
     id: role.id,
     name: role.name,
   }));
-  await guild.members.fetch();
+
   await Promise.all(
     serverRoles.map(async (serverRole) => {
       const serverRoleExists = await prismaDiscordClient.cluster.findOne({
@@ -28,50 +28,51 @@ client.on("ready", async () => {
     })
   );
 
+  const users = await guild.members.fetch();
+
   await Promise.all(
-    //Loop over server roles
-    serverRoles.map(async (role) => {
-      //Get all members for the role
-      const memberForRoles = await guild.roles.cache.get(role.id).members;
-      //For each member
-      await Promise.all(
-        memberForRoles.map(async (member) => {
-          const userFromDB = await prismaDiscordClient.user.findOne({
-            where: { discord_id: member.user.id },
-          });
-          if (userFromDB) {
-            //Connect the user to the role if user exists
-            const usersFromRole = await prismaDiscordClient.cluster
-              .findOne({ where: { roleId: role.id } })
-              .users();
-            const oldConnections = usersFromRole.map((userFromRole) => ({
-              id: userFromRole.id,
-            }));
-            await prismaDiscordClient.cluster.update({
-              where: { roleId: role.id },
-              data: {
-                users: {
-                  connect: [...oldConnections, { id: userFromDB.id }],
-                },
-              },
-            });
-          } else {
-            // If not exists, Create the user and connect to the role
-            await prismaDiscordClient.user.create({
-              data: {
-                username: member.user.username,
-                discord_id: member.user.id,
-                name: member.user.username,
-                clusters: {
-                  connect: [{ roleId: role.id }],
-                },
-              },
-            });
-          }
-        })
-      );
+    users.map(async (user) => {
+      const roles = user.roles.cache.map((role) => ({ roleId: role.id }));
+      try {
+        return await prismaDiscordClient.user.upsert({
+          where: { username: user.user.username },
+          create: {
+            username: user.user.username,
+            discord_id: user.user.id,
+            name: user.user.username,
+            clusters: {
+              connect: roles,
+            },
+            pictureURL: user.user.avatarURL({
+              dynamic: true,
+              format: "png",
+              size: 256,
+            }),
+          },
+          update: {
+            clusters: {
+              connect: roles,
+            },
+            pictureURL: user.user.avatarURL({
+              dynamic: true,
+              format: "png",
+              size: 256,
+            }),
+          },
+        });
+      } catch (err) {
+        console.log(user.user.username);
+        console.log(err);
+      }
     })
   );
+  console.log("Finished doing the import from Discord server");
+}
+
+client.on("ready", async () => {
+  const prismaDiscordClient = new PrismaClient();
+  await discordTask(prismaDiscordClient);
+  setInterval(() => discordTask(prismaDiscordClient), 30 * 60 * 1000);
 });
 
 export const startBotProcess = () => {
