@@ -1,15 +1,15 @@
 import React from "react";
-import { Flex, Divider } from "@chakra-ui/react";
+import { Flex, Divider, Grid, GridItem } from "@chakra-ui/react";
 import Cluster from "../components/cluster";
 
 const PodData = ({ podLeaders, mentors }) => {
   if (!(podLeaders.length || mentors.length)) {
-    return <Divider w="6xl" borderWidth={2} />;
+    return <></>;
   }
 
   return (
-    <>
-      <Flex w="100%" direction="row" py={4}>
+    <Grid templateColumns={["auto", "auto", "auto 1fr"]}>
+      <GridItem>
         {podLeaders.length ? (
           <Flex pr={10}>
             <Cluster
@@ -23,6 +23,8 @@ const PodData = ({ podLeaders, mentors }) => {
         ) : (
           <></>
         )}
+      </GridItem>
+      <GridItem>
         {mentors.length ? (
           <Flex>
             <Cluster
@@ -36,8 +38,8 @@ const PodData = ({ podLeaders, mentors }) => {
         ) : (
           <></>
         )}
-      </Flex>
-    </>
+      </GridItem>
+    </Grid>
   );
 };
 

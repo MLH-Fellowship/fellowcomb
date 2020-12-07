@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 
 import {
-  Flex,
   Link,
   Icon,
   Avatar,
-  Spacer,
   HStack,
-  Divider,
   Heading,
   useDisclosure,
   Button,
@@ -21,10 +18,10 @@ import {
   ModalCloseButton,
   Text,
   useToast,
-  Box,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
 import { FaCalendarAlt, FaLinkedin, FaGithub, FaDiscord } from "react-icons/fa";
-import { createDM } from "../services/query";
 
 const Profile = ({ user, user: { color, discord_id } }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -84,68 +81,70 @@ const Profile = ({ user, user: { color, discord_id } }) => {
     onClose();
   };
 
-  const callCreateDM = (discord_id) => {
-    // createDM(discord_id).then((response) => {
-    //   console.log(response.data);
-    // });
-    window.location.href = `https://discordapp.com/users/${discord_id}`;
-  };
   return (
     <>
-      <Flex w="100%" align="center" direction="row" py="8">
-        <Avatar
-          size="2xl"
-          background={iconColor}
-          src={user.pictureURL}
-          name={user.name}
-        />
-        <Box ml="8">
-          <Heading size="xl">{user.name}</Heading>
-          <Text fontSize="xl">{user.username}</Text>
-        </Box>
-        <Spacer />
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Update your details</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <Stack spacing="2" mb="2">
-                <Text>{socialType} url</Text>
-                <Input
-                  label="url"
-                  placeholder="eg. https://  ..."
-                  onChange={(e) => setSocialValue(e.target.value)}
-                />
-                <Button
-                  colorScheme={user.color}
-                  onClick={updateDetails}
-                  isLoading={isUpdating}
-                >
-                  Save
-                </Button>
-              </Stack>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-        <Box>
-          {user.guest ? (
-            <Button
-              width="full"
-              my="2vh"
-              colorScheme={user.color}
-              onClick={() => callCreateDM(discord_id)}
-            >
-              CHAT
-            </Button>
-          ) : (
-            ""
-          )}
-          <HStack spacing="4">
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Update your details</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Stack spacing="2" mb="2">
+              <Text>{socialType} url</Text>
+              <Input
+                label="url"
+                placeholder="eg. https://  ..."
+                onChange={(e) => setSocialValue(e.target.value)}
+              />
+              <Button
+                colorScheme={user.color}
+                onClick={updateDetails}
+                isLoading={isUpdating}
+              >
+                Save
+              </Button>
+            </Stack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      <Grid
+        p="4"
+        templateColumns={["auto", "auto", "1fr auto", "1fr auto", "1fr auto"]}
+      >
+        <GridItem
+          display="grid"
+          alignItems="center"
+          overflow="hidden"
+          gridTemplateColumns={["auto", "auto 1fr", "auto 1fr"]}
+        >
+          <GridItem mx={["auto", 0]}>
+            <Avatar
+              size="xl"
+              background={iconColor}
+              src={user.pictureURL}
+              name={user.name}
+            />
+          </GridItem>
+          <GridItem mx={["auto", 4, 8]} textAlign={["center", "left"]} py={4}>
+            <Heading>{user.name}</Heading>
+            <Text>{user.username}</Text>
+          </GridItem>
+        </GridItem>
+
+        <GridItem
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          py={10}
+          maxW="100%"
+        >
+          <HStack w="100%" spacing={["auto", "auto", 4, 4, 4]}>
             <Link onClick={() => addOrOpen("Calendly", user.calendly)}>
               <Icon
                 as={FaCalendarAlt}
-                boxSize="6"
+                boxSize={[8, 10, 10, 10, 12]}
                 color={user.calendly ? iconColor : disabledColor}
                 _hover={{
                   color: user.calendly ? iconHoverColor : disabledColor,
@@ -155,7 +154,7 @@ const Profile = ({ user, user: { color, discord_id } }) => {
             <Link onClick={() => addOrOpen("LinkedIn", user.linkedin)}>
               <Icon
                 as={FaLinkedin}
-                boxSize="6"
+                boxSize={[8, 10, 10, 10, 12]}
                 color={user.linkedin ? iconColor : disabledColor}
                 _hover={{
                   color: user.linkedin ? iconHoverColor : disabledColor,
@@ -165,7 +164,7 @@ const Profile = ({ user, user: { color, discord_id } }) => {
             <Link onClick={() => addOrOpen("GitHub", user.github)}>
               <Icon
                 as={FaGithub}
-                boxSize="4em"
+                boxSize={[8, 10, 10, 10, 12]}
                 color={user.github ? iconColor : disabledColor}
                 _hover={{
                   color: user.github ? iconHoverColor : disabledColor,
@@ -175,7 +174,7 @@ const Profile = ({ user, user: { color, discord_id } }) => {
             <Link onClick={() => addOrOpen("Discord", user.discord)}>
               <Icon
                 as={FaDiscord}
-                boxSize="6"
+                boxSize={[8, 10, 10, 10, 12]}
                 color={user.discord ? iconColor : disabledColor}
                 _hover={{
                   color: user.discord ? iconHoverColor : disabledColor,
@@ -183,8 +182,8 @@ const Profile = ({ user, user: { color, discord_id } }) => {
               />
             </Link>
           </HStack>
-        </Box>
-      </Flex>
+        </GridItem>
+      </Grid>
     </>
   );
 };

@@ -113,26 +113,21 @@ const Header = (props) => {
         padding="1.5rem"
         {...props}
       >
-        <Flex align="center" mr={5}>
+        <Flex align="center">
           <ReactLink to="/">
-            <Image src={Honeycomb} width="38px" px="3px" mx="4px" />
+            <Image src={Honeycomb} w={8} mx={2} />
           </ReactLink>
           <Heading as={ReactLink} to="/" size="xl" fontFamily="KoHo">
             fellowcomb
           </Heading>
         </Flex>
 
-        <Flex
-          mt={{ base: 4, md: 0 }}
-          align="center"
-          justifyContent="space-between"
-        >
+        <Flex align="center" justifyContent="space-between">
           {!props.isLoggedIn ? (
             <>
               {/* Search Bar */}
-              <InputGroup size="md">
+              <InputGroup display={["none", "none", "block"]} size="md">
                 <Input
-                  pr="4.5rem"
                   type="text"
                   placeholder="Find People..."
                   onChange={handleChange}
@@ -155,24 +150,21 @@ const Header = (props) => {
                 </InputRightElement>
               </InputGroup>
 
-              <Button
+              {/* <Button
                 as={ReactLink}
                 to="/graph-view"
-                bg="transparent"
-                variant="outline"
+                variant="ghost"
                 border="0px"
-                ml={6}
                 onClick={() => signOut()}
                 colorScheme="yellow"
               >
                 Explore
-              </Button>
+              </Button> */}
 
               <Button
-                bg="transparent"
-                variant="outline"
-                border="0px"
-                mx={6}
+                variant="ghost"
+                mx={[2, 2, 4]}
+                p={4}
                 onClick={() => signOut()}
                 colorScheme="yellow"
               >

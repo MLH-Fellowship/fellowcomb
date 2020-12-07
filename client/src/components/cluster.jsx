@@ -21,6 +21,7 @@ import {
   Link,
   Tooltip,
   Image,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa";
 
@@ -93,6 +94,15 @@ const Cluster = ({ data, color }) => {
 
   // TODO: decide if the user is following this cluster
   let action = "unfollow";
+
+  const variant = useBreakpointValue({
+    base: 3,
+    xs: 3,
+    sm: 5,
+    md: 10,
+    lg: 15,
+  });
+
   return (
     <>
       <Box>
@@ -117,7 +127,7 @@ const Cluster = ({ data, color }) => {
         </Flex>
         <Divider />
         <Box py={4} width="100%">
-          <AvatarGroup size="md" max={15}>
+          <AvatarGroup size="md" max={variant}>
             {users.map((user) => (
               <Avatar
                 to={`/users/${user.username}`}
