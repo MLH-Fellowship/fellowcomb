@@ -1,0 +1,26 @@
+name: Fellowcomb website
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  app:
+    name: Webpage
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client/
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn build
+
+      - name: Sync with AWS
+        run: aws s3 sync build/ s3://fellowcomb
