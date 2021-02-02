@@ -153,7 +153,7 @@ router.post("/discord", async (req, res, next) => {
     console.log(discordUser.data);
 
     const { id: discord_id, username } = discordUser.data;
-    const userFromDatabase = await prismaAuthClient.user.findOne({
+    const userFromDatabase = await prismaAuthClient.user.findUnique({
       where: { username },
     });
 
@@ -170,7 +170,7 @@ router.post("/discord", async (req, res, next) => {
       res.send({ userId: session.id, newUser: true });
     } else {
       const existingSessions = await prismaAuthClient.user
-        .findOne({ where: { id: userFromDatabase.id } })
+        .findUnique({ where: { id: userFromDatabase.id } })
         .UserSessions();
       await Promise.all(
         existingSessions.map(async (session) => {

@@ -1,6 +1,6 @@
 import { nexusPrisma } from "nexus-plugin-prisma";
-import { makeSchema, objectType, queryType, stringArg } from "@nexus/schema";
-import { nexusSchemaPrisma } from "nexus-plugin-prisma/schema";
+// import { makeSchema, objectType, queryType, stringArg } from "@nexus/schema";
+import { makeSchema, objectType, queryType, stringArg } from "nexus";
 import path from "path";
 import { response } from "express";
 
@@ -20,7 +20,7 @@ const User = objectType({
       type: "String",
       resolve: async (parent, args, context, info) => {
         const clusters = await context.prisma.user
-          .findOne({
+          .findUnique({
             where: { id: parent.id },
           })
           .clusters();
@@ -39,7 +39,7 @@ const User = objectType({
       type: User,
       resolve: async (parent, args, context, info) => {
         const clusters = await context.prisma.user
-          .findOne({
+          .findUnique({
             where: { id: parent.id },
           })
           .clusters();
@@ -70,7 +70,7 @@ const User = objectType({
       type: "User",
       resolve: async (parent, args, context, info) => {
         const clusters = await context.prisma.user
-          .findOne({
+          .findUnique({
             where: { id: parent.id },
           })
           .clusters();
@@ -120,7 +120,7 @@ const Query = queryType({
       type: "User",
       resolve: async (parent, args, context, info) => {
         return await context.prisma.userSession
-          .findOne({ where: { id: context.token } })
+          .findUnique({ where: { id: context.token } })
           .user();
       },
     });
@@ -130,7 +130,7 @@ const Query = queryType({
         username: stringArg(),
       },
       resolve: async (parent, args, context, info) => {
-        return await context.prisma.user.findOne({
+        return await context.prisma.user.findUnique({
           where: { username: args.username },
         });
       },
@@ -156,25 +156,12 @@ const Query = queryType({
 
 export const schema = makeSchema({
   types: [Query, User, Cluster],
-  plugins: [nexusSchemaPrisma()],
+  plugins: [nexusPrisma()],
   outputs: {
     schema: path.join(__dirname, "schema.graphql"),
-    typegen: path.join(__dirname, "nexus.d.ts"),
+    typegen: path.join(__dirname, "nexus_types.d.ts"),
   },
   shouldExitAfterGenerateArtifacts: Boolean(
     process.env.NEXUS_SHOULD_EXIT_AFTER_REFLECTION
   ),
-  typegenAutoConfig: {
-    contextType: "Context.Context",
-    sources: [
-      {
-        source: "@prisma/client",
-        alias: "prisma",
-      },
-      {
-        source: require.resolve("./context"),
-        alias: "Context",
-      },
-    ],
-  },
 });

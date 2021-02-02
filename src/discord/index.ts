@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 const client = new Discord.Client();
 const serverId = "716052909271285803";
 
-async function discordTask(prismaDiscordClient) {
+async function discordTask(prismaDiscordClient: PrismaClient) {
   console.log("Starting the discord task.");
   const guild = client.guilds.cache.get(serverId);
   const serverRoles = guild.roles.cache.map((role) => ({
@@ -14,7 +14,7 @@ async function discordTask(prismaDiscordClient) {
 
   await Promise.all(
     serverRoles.map(async (serverRole) => {
-      const serverRoleExists = await prismaDiscordClient.cluster.findOne({
+      const serverRoleExists = await prismaDiscordClient.cluster.findUnique({
         where: { name: serverRole.name },
       });
       if (!serverRoleExists) {
