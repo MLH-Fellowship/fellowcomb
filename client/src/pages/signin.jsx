@@ -25,7 +25,7 @@ const SignIn = () => {
       </Box>
       <Link
         style={{ textDecoration: "none" }}
-        href={`https://discord.com/api/oauth2/authorize?client_id=778655560777465876&permissions=0&redirect_uri=${redirect_uri}&response_type=code&scope=guilds.join%20identify%20guilds`}
+        href={`https://discord.com/api/oauth2/authorize?client_id=778655560777465876&redirect_uri=${redirect_uri}&response_type=code&scope=guilds%20identify`}
       >
         <Button colorScheme="yellow">Continue with Discord</Button>
       </Link>
