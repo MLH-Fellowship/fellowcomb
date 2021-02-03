@@ -27,7 +27,9 @@ apolloServer.applyMiddleware({ app });
 const httpServer = http.createServer(app);
 apolloServer.installSubscriptionHandlers(httpServer);
 
-httpServer.listen({ port: 4000 }, () => {
+const PORT = process.env.PORT || 4000;
+
+httpServer.listen({ port: PORT }, () => {
   startBotProcess();
-  console.log(`🚀  Server ready at http://localhost:4000/graphql`);
+  console.log(`🚀  Server ready at http://localhost:${PORT}/graphql`);
 });
